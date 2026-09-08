@@ -1,0 +1,36 @@
+details {
+      border: 1px solid #ddd;
+      border-radius: 5px;
+      margin-bottom: 8px;
+      padding: 0.5em 1em;
+      background-color: #f9f9f9;
+      transition: background-color 0.3s;
+    }
+
+    details[open] {
+      background-color: #e7f1ff;
+    }
+
+    summary {
+      font-weight: 600;
+      cursor: pointer;
+      list-style: none;
+    }
+
+    summary::-webkit-details-marker {
+      display: none;
+    }
+
+    summary::before {
+      content: "➕  ";
+      font-size: 1em;
+    }
+
+    details[open] summary::before {
+      content: "➖ ";
+    }
+
+    .content {
+      margin-top: 0.5em;
+      color: #444;
+    }

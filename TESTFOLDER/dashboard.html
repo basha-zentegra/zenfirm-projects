@@ -1,0 +1,826 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Bankio - Financial Dashboard</title>
+    
+    <!-- Bootstrap 5 -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    
+    <!-- Bootstrap Icons -->
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.0/font/bootstrap-icons.css">
+    
+    <!-- Google Fonts -->
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            font-family: 'Poppins', sans-serif;
+            background-color: #EBF1F5;
+            color: #1A1D23;
+        }
+        
+        .rounded-4 {
+            border-radius: 20px !important;
+        }
+        
+        .card {
+            border: none;
+            box-shadow: 0 4px 20px rgba(0,0,0,0.05);
+        }
+        
+        /* Navbar */
+        .navbar {
+            background: white;
+            padding: 1rem 0;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.03);
+        }
+        
+        .logo {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            font-weight: 700;
+            font-size: 1.5rem;
+            color: #1A1D23;
+        }
+        
+        .logo-icon {
+            width: 32px;
+            height: 32px;
+            background: linear-gradient(135deg, #6BCB77, #4CAF50);
+            border-radius: 8px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            font-weight: bold;
+        }
+        
+        .nav-links {
+            display: flex;
+            gap: 2rem;
+            list-style: none;
+            margin: 0;
+        }
+        
+        .nav-links a {
+            text-decoration: none;
+            color: #8A94A6;
+            font-weight: 500;
+            transition: color 0.3s;
+        }
+        
+        .nav-links a.active,
+        .nav-links a:hover {
+            color: #1A1D23;
+        }
+        
+        .search-bar {
+            position: relative;
+            width: 300px;
+        }
+        
+        .search-bar input {
+            width: 100%;
+            padding: 10px 45px 10px 20px;
+            border-radius: 25px;
+            border: none;
+            background: #F0F2F5;
+            font-size: 0.9rem;
+        }
+        
+        .search-bar i {
+            position: absolute;
+            right: 20px;
+            top: 50%;
+            transform: translateY(-50%);
+            color: #8A94A6;
+        }
+        
+        .nav-actions {
+            display: flex;
+            align-items: center;
+            gap: 1.5rem;
+        }
+        
+        .action-btn {
+            background: #F0F2F5;
+            border: none;
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: #8A94A6;
+            cursor: pointer;
+        }
+        
+        .user-avatar {
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            background: linear-gradient(135deg, #667eea, #764ba2);
+        }
+        
+        /* Dashboard */
+        .dashboard {
+            padding: 2rem 0;
+        }
+        
+        /* Balance Card */
+        .balance-card {
+            background: white;
+            padding: 2rem;
+        }
+        
+        .balance-amount {
+            font-size: 2.5rem;
+            font-weight: 700;
+            margin: 1rem 0;
+        }
+        
+        .action-buttons {
+            display: flex;
+            gap: 1rem;
+            margin-top: 1.5rem;
+        }
+        
+        .btn-action {
+            flex: 1;
+            padding: 12px 24px;
+            border-radius: 25px;
+            border: none;
+            font-weight: 500;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 8px;
+            cursor: pointer;
+            transition: transform 0.2s;
+        }
+        
+        .btn-action:hover {
+            transform: translateY(-2px);
+        }
+        
+        .btn-send {
+            background: #1A1D23;
+            color: white;
+        }
+        
+        .btn-receive {
+            background: #F0F2F5;
+            color: #1A1D23;
+        }
+        
+        /* My Cards */
+        .section-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 1rem;
+        }
+        
+        .section-title {
+            font-size: 1.25rem;
+            font-weight: 600;
+        }
+        
+        .see-all {
+            color: #667eea;
+            text-decoration: none;
+            font-size: 0.9rem;
+            font-weight: 500;
+        }
+        
+        .cards-container {
+            display: flex;
+            gap: 1rem;
+            overflow-x: auto;
+            padding-bottom: 1rem;
+        }
+        
+        .credit-card {
+            min-width: 265px;
+            height: 160px;
+            border-radius: 16px;
+            padding: 1.5rem;
+            color: #1A1D23;
+            display: flex;
+            flex-direction: column;
+            justify-content: space-between;
+        }
+        
+        .card-blue {
+            background: #C3D0F7;
+        }
+        
+        .card-green {
+            background: #D8EADF;
+        }
+        
+        .card-visa {
+            font-size: 1.5rem;
+            font-weight: 700;
+            opacity: 0.8;
+        }
+        
+        .card-number {
+            font-size: 1.1rem;
+            letter-spacing: 2px;
+            margin: 0.5rem 0;
+        }
+        
+        .card-holder {
+            font-size: 0.85rem;
+            text-transform: uppercase;
+            opacity: 0.8;
+        }
+        
+        .add-card {
+            min-width: 60px;
+            height: 160px;
+            background: #1A1D23;
+            border-radius: 16px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            font-size: 2rem;
+            cursor: pointer;
+            transition: background 0.3s;
+        }
+        
+        .add-card:hover {
+            background: #2d3139;
+        }
+        
+        /* Spending Card */
+        .spending-card {
+            background: #C3D0F7;
+            padding: 2rem;
+        }
+        
+        .card-header-custom {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 1rem;
+        }
+        
+        .month-dropdown {
+            background: rgba(255,255,255,0.5);
+            border: none;
+            border-radius: 20px;
+            padding: 6px 12px;
+            font-size: 0.85rem;
+            cursor: pointer;
+        }
+        
+        .spending-amount {
+            font-size: 2rem;
+            font-weight: 700;
+            margin-bottom: 1.5rem;
+        }
+        
+        /* Promo Card */
+        .promo-card {
+            background: #D8EADF;
+            padding: 2rem;
+            position: relative;
+            overflow: hidden;
+        }
+        
+        .promo-text {
+            font-size: 1.25rem;
+            font-weight: 600;
+            margin-bottom: 1.5rem;
+            position: relative;
+            z-index: 2;
+        }
+        
+        .promo-art {
+            position: absolute;
+            right: -20px;
+            top: 50%;
+            transform: translateY(-50%);
+            width: 120px;
+            height: 120px;
+            border-radius: 50%;
+            border: 3px dashed rgba(26,29,35,0.2);
+            z-index: 1;
+        }
+        
+        .btn-learn {
+            background: #667eea;
+            color: white;
+            border: none;
+            padding: 10px 24px;
+            border-radius: 25px;
+            font-weight: 500;
+            cursor: pointer;
+            position: relative;
+            z-index: 2;
+        }
+        
+        /* Transactions Card */
+        .transactions-card {
+            background: #D8EADF;
+            padding: 2rem;
+        }
+        
+        .transaction-item {
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+            padding: 1rem 0;
+            border-bottom: 1px solid rgba(26,29,35,0.05);
+        }
+        
+        .transaction-item:last-child {
+            border-bottom: none;
+        }
+        
+        .transaction-icon {
+            width: 45px;
+            height: 45px;
+            border-radius: 12px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.2rem;
+            flex-shrink: 0;
+        }
+        
+        .icon-apple {
+            background: #000;
+            color: white;
+        }
+        
+        .icon-user {
+            background: #667eea;
+            color: white;
+        }
+        
+        .icon-dribbble {
+            background: #ea4c89;
+            color: white;
+        }
+        
+        .icon-food {
+            background: #ff6b6b;
+            color: white;
+        }
+        
+        .icon-paypal {
+            background: #0070ba;
+            color: white;
+        }
+        
+        .transaction-info {
+            flex: 1;
+        }
+        
+        .transaction-name {
+            font-weight: 600;
+            font-size: 0.95rem;
+        }
+        
+        .transaction-date {
+            font-size: 0.8rem;
+            color: #8A94A6;
+        }
+        
+        .transaction-amount {
+            font-weight: 600;
+            font-size: 1rem;
+        }
+        
+        .amount-negative {
+            color: #ff6b6b;
+        }
+        
+        .amount-positive {
+            color: #6BCB77;
+        }
+        
+        /* Credit Score Card */
+        .credit-score-card {
+            background: white;
+            padding: 2rem;
+            text-align: center;
+        }
+        
+        .score-value {
+            font-size: 2.5rem;
+            font-weight: 700;
+            margin: 1rem 0 0.5rem;
+        }
+        
+        .score-label {
+            color: #6BCB77;
+            font-weight: 600;
+            margin-bottom: 1.5rem;
+        }
+        
+        .btn-explore {
+            background: #e3f2fd;
+            color: #667eea;
+            border: none;
+            padding: 10px 24px;
+            border-radius: 25px;
+            font-weight: 500;
+            cursor: pointer;
+            width: 100%;
+        }
+        
+        /* Expenses Card */
+        .expenses-card {
+            background: white;
+            padding: 2rem;
+        }
+        
+        .expenses-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 1rem;
+        }
+        
+        .expenses-amount {
+            font-size: 1.75rem;
+            font-weight: 700;
+            margin-bottom: 1rem;
+        }
+        
+        .date-dropdown {
+            background: #F0F2F5;
+            border: none;
+            border-radius: 20px;
+            padding: 6px 12px;
+            font-size: 0.85rem;
+            cursor: pointer;
+        }
+        
+        @media (max-width: 768px) {
+            .nav-links {
+                display: none;
+            }
+            
+            .search-bar {
+                width: 200px;
+            }
+            
+            .balance-amount {
+                font-size: 2rem;
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- Navbar -->
+    <nav class="navbar">
+        <div class="container-fluid px-4">
+            <div class="d-flex align-items-center gap-5 w-100">
+                <!-- Logo -->
+                <div class="logo">
+                    <div class="logo-icon">Z</div>
+                    <span>NMG</span>
+                </div>
+                
+                <!-- Nav Links -->
+                <ul class="nav-links d-none d-lg-flex">
+                    <li><a href="#" class="active">All</a></li>
+                    <li><a href="#">Transactions</a></li>
+                    <li><a href="#">Analysis</a></li>
+                    <li><a href="#">Expenses</a></li>
+                    <li><a href="#">Spending</a></li>
+                </ul>
+                
+                <!-- Right Side -->
+                <div class="ms-auto d-flex align-items-center gap-3">
+                    <div class="search-bar">
+                        <input type="text" placeholder="Search...">
+                        <i class="bi bi-search"></i>
+                    </div>
+                    
+                    <div class="nav-actions">
+                        <button class="action-btn">
+                            <i class="bi bi-arrow-clockwise"></i>
+                        </button>
+                        <button class="action-btn">
+                            <i class="bi bi-geo-alt"></i>
+                        </button>
+                        <div class="user-avatar"></div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </nav>
+    
+    <!-- Dashboard -->
+    <div class="container-fluid px-4 dashboard">
+        <div class="row g-4">
+            <!-- Left Column -->
+            <div class="col-lg-5">
+                <!-- Total Balance -->
+                <div class="card rounded-4 balance-card mb-4">
+                    <h6 class="text-muted">Total Balance</h6>
+                    <div class="balance-amount">$31,180.24</div>
+                    <div class="action-buttons">
+                        <button class="btn-action btn-send">
+                            <i class="bi bi-arrow-up"></i>
+                            Send
+                        </button>
+                        <button class="btn-action btn-receive">
+                            <i class="bi bi-arrow-down"></i>
+                            Receive
+                        </button>
+                    </div>
+                </div>
+                
+                <!-- My Cards -->
+                <div class="mb-4">
+                    <div class="section-header">
+                        <h5 class="section-title">My Cards</h5>
+                    </div>
+                    <div class="cards-container">
+                        <div class="credit-card card-blue">
+                            <div class="card-visa">VISA</div>
+                            <div>
+                                <div class="card-number">•••• •••• •••• 4296</div>
+                                <div class="card-holder">John Doe</div>
+                            </div>
+                        </div>
+                        <div class="credit-card card-green">
+                            <div class="card-visa">VISA</div>
+                            <div>
+                                <div class="card-number">•••• •••• •••• 8742</div>
+                                <div class="card-holder">Jane Smith</div>
+                            </div>
+                        </div>
+                        <div class="add-card">+</div>
+                    </div>
+                </div>
+                
+                <!-- Expenses Chart -->
+                <div class="card rounded-4 expenses-card" style="width: 1000px;">
+                    <div class="expenses-header">
+                        <div>
+                            <h5 class="section-title">Expenses</h5>
+                            <div class="expenses-amount">$12,141.44</div>
+                        </div>
+                        <select class="date-dropdown">
+                            <option>Dec 06</option>
+                            <option>Nov 06</option>
+                            <option>Oct 06</option>
+                        </select>
+                    </div>
+                    <canvas id="expensesChart"></canvas>
+                </div>
+            </div>
+            
+            <!-- Middle Column -->
+            <div class="col-lg-3">
+                <!-- Spending -->
+                <div class="card rounded-4 spending-card mb-4">
+                    <div class="card-header-custom">
+                        <h5 class="section-title">Spending</h5>
+                        <select class="month-dropdown">
+                            <option>March</option>
+                            <option>April</option>
+                            <option>May</option>
+                        </select>
+                    </div>
+                    <div class="spending-amount">$5,244.00</div>
+                    <canvas id="spendingChart"></canvas>
+                </div>
+                
+                <!-- Promo Card -->
+                <div class="card rounded-4 promo-card">
+                    <div class="promo-art"></div>
+                    <div class="promo-text">How To Manage Money Well?</div>
+                    <button class="btn-learn">Learn More</button>
+                </div>
+            </div>
+            
+            <!-- Right Column -->
+            <div class="col-lg-4">
+                <!-- Transactions -->
+                <div class="card rounded-4 transactions-card mb-4">
+                    <div class="section-header">
+                        <h5 class="section-title">Transactions</h5>
+                        <a href="#" class="see-all">See All</a>
+                    </div>
+                    
+                    <div class="transaction-item">
+                        <div class="transaction-icon icon-apple">
+                            <i class="bi bi-apple"></i>
+                        </div>
+                        <div class="transaction-info">
+                            <div class="transaction-name">Apple Inc</div>
+                            <div class="transaction-date">28 January 2024</div>
+                        </div>
+                        <div class="transaction-amount amount-negative">-$48.00</div>
+                    </div>
+                    
+                    <div class="transaction-item">
+                        <div class="transaction-icon icon-user">
+                            <i class="bi bi-person"></i>
+                        </div>
+                        <div class="transaction-info">
+                            <div class="transaction-name">Jerry Helfer</div>
+                            <div class="transaction-date">26 January 2024</div>
+                        </div>
+                        <div class="transaction-amount amount-positive">+$120.00</div>
+                    </div>
+                    
+                    <div class="transaction-item">
+                        <div class="transaction-icon icon-dribbble">
+                            <i class="bi bi-dribbble"></i>
+                        </div>
+                        <div class="transaction-info">
+                            <div class="transaction-name">Dribbble</div>
+                            <div class="transaction-date">24 January 2024</div>
+                        </div>
+                        <div class="transaction-amount amount-negative">-$360.00</div>
+                    </div>
+                    
+                    <div class="transaction-item">
+                        <div class="transaction-icon icon-food">
+                            <i class="bi bi-basket"></i>
+                        </div>
+                        <div class="transaction-info">
+                            <div class="transaction-name">Elera Food</div>
+                            <div class="transaction-date">22 January 2024</div>
+                        </div>
+                        <div class="transaction-amount amount-negative">-$452.00</div>
+                    </div>
+                    
+                    <div class="transaction-item">
+                        <div class="transaction-icon icon-paypal">
+                            <i class="bi bi-paypal"></i>
+                        </div>
+                        <div class="transaction-info">
+                            <div class="transaction-name">Paypal Payment</div>
+                            <div class="transaction-date">20 January 2024</div>
+                        </div>
+                        <div class="transaction-amount amount-positive">+$102.00</div>
+                    </div>
+                </div>
+                
+                <!-- Credit Score -->
+                <div class="card rounded-4 credit-score-card">
+                    <div class="section-header">
+                        <h5 class="section-title">Credit Score</h5>
+                        <a href="#" class="see-all">See More</a>
+                    </div>
+                    <canvas id="creditScoreChart"></canvas>
+                    <div class="score-value">1620</div>
+                    <div class="score-label">Excellent</div>
+                    <button class="btn-explore">Explore Benefits</button>
+                </div>
+            </div>
+        </div>
+    </div>
+    
+    <!-- Scripts -->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/4.4.0/chart.umd.min.js"></script>
+    
+    <script>
+        // Expenses Chart (Area Chart)
+        const expensesCtx = document.getElementById('expensesChart').getContext('2d');
+        new Chart(expensesCtx, {
+            type: 'line',
+            data: {
+                labels: ['1 Dec', '2 Dec', '3 Dec', '4 Dec', '5 Dec', '6 Dec', '7 Dec', '8 Dec', '9 Dec', '10 Dec'],
+                datasets: [{
+                    label: 'Expenses',
+                    data: [8000, 10000, 7500, 12000, 9500, 11000, 8500, 13000, 11500, 12141],
+                    borderColor: '#667eea',
+                    backgroundColor: 'rgba(102, 126, 234, 0.1)',
+                    fill: true,
+                    tension: 0.4,
+                    borderWidth: 2,
+                    pointRadius: 0
+                }]
+            },
+            options: {
+                responsive: true,
+                maintainAspectRatio: true,
+                plugins: {
+                    legend: {
+                        display: false
+                    }
+                },
+                scales: {
+                    y: {
+                        beginAtZero: true,
+                        grid: {
+                            color: 'rgba(0, 0, 0, 0.05)'
+                        },
+                        ticks: {
+                            callback: function(value) {
+                                return '$' + value.toLocaleString();
+                            }
+                        }
+                    },
+                    x: {
+                        grid: {
+                            display: false
+                        }
+                    }
+                }
+            }
+        });
+        
+        // Spending Chart (Bar Chart)
+        const spendingCtx = document.getElementById('spendingChart').getContext('2d');
+        new Chart(spendingCtx, {
+            type: 'bar',
+            data: {
+                labels: ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun'],
+                datasets: [{
+                    label: 'Spending',
+                    data: [3200, 4100, 5244, 4500, 3800, 4200],
+                    backgroundColor: 'rgba(255, 255, 255, 0.8)',
+                    borderRadius: 10,
+                    barThickness: 24
+                }]
+            },
+            options: {
+                responsive: true,
+                maintainAspectRatio: true,
+                plugins: {
+                    legend: {
+                        display: false
+                    }
+                },
+                scales: {
+                    y: {
+                        beginAtZero: true,
+                        display: false
+                    },
+                    x: {
+                        grid: {
+                            display: false
+                        },
+                        ticks: {
+                            color: '#1A1D23'
+                        }
+                    }
+                }
+            }
+        });
+        
+        // Credit Score Chart (Doughnut/Gauge)
+        const creditScoreCtx = document.getElementById('creditScoreChart').getContext('2d');
+        new Chart(creditScoreCtx, {
+            type: 'doughnut',
+            data: {
+                datasets: [{
+                    data: [81, 19],
+                    backgroundColor: [
+                        createGradient(creditScoreCtx),
+                        '#F0F2F5'
+                    ],
+                    borderWidth: 0,
+                    circumference: 180,
+                    rotation: 270
+                }]
+            },
+            options: {
+                responsive: true,
+                maintainAspectRatio: true,
+                cutout: '75%',
+                plugins: {
+                    legend: {
+                        display: false
+                    },
+                    tooltip: {
+                        enabled: false
+                    }
+                }
+            }
+        });
+        
+        function createGradient(ctx) {
+            const gradient = ctx.createLinearGradient(0, 0, 0, 200);
+            gradient.addColorStop(0, '#6BCB77');
+            gradient.addColorStop(0.5, '#FFD93D');
+            gradient.addColorStop(1, '#FF6B6B');
+            return gradient;
+        }
+    </script>
+</body>
+</html>

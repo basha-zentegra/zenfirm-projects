@@ -1,0 +1,1607 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    
+    <!-- ----- ZOHO SDK INIT -----  -->
+    <script src=" https://js.zohostatic.com/creator/widgets/version/1.0/widgetsdk-min.js"></script>
+
+    <!--  ----- FONTS POPPINS -----  -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:ital,wght@0,100;0,200;0,300;0,400;0,500;0,600;0,700;0,800;0,900;1,100;1,200;1,300;1,400;1,500;1,600;1,700;1,800;1,900&display=swap" rel="stylesheet">
+
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-sRIl4kxILFvY47J16cr9ZwB07vP4J8+LH7qKQnuqkuIAvNWLzeN8tE5YBujZqJLB" crossorigin="anonymous">
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/js/bootstrap.bundle.min.js" integrity="sha384-FKyoEForCGlyvwx9Hj09JcYn3nv7wiPVlz7YYwJrWVcXK/BmnVDxM+D2scQbITxI" crossorigin="anonymous"></script>
+
+    <!-- ----- BOOTSTRAP CDN -----  -->
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.13.1/font/bootstrap-icons.min.css">
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+
+    <!-- ----- MY STYLE SHEETS -----  -->
+    <link rel="stylesheet" href="CSS/index.css">
+    <link rel="stylesheet" href="CSS/datepicker.css">
+    <link rel="stylesheet" href="CSS/imap.css">
+    <link rel="stylesheet" href="CSS/timeline.css">
+    <link rel="stylesheet" href="CSS/notes.css">
+    <link rel="stylesheet" href="CSS/timeinput.css">
+    <link rel="stylesheet" href="CSS/timesheet_kpi.css">
+
+</head>
+<body>
+
+    <!-- loading-animation d-flex justify-content-center align-items-end-->
+    <div id="loading-animation" class="loading-animation  pb-5 pt-5" >
+        <section class="text-center ">
+            <img src="ASSETS/AllProjects.png" alt=""><br>
+            <div class="spinner-border text-primary" role="status">
+                <span class="visually-hidden">Loading...</span>
+            </div>
+        </section>
+    </div>
+
+
+    <main class="m-4 m-md-5">
+
+        <div class="dropdown-center ms-auto" style="position: absolute; top: -1px; right: 10%; z-index: 1057;">
+                <button class="btn btn-dark dropdown-toggle btn-sm" type="button" data-bs-toggle="dropdown" aria-expanded="false" onclick="showRecentProjects()">
+                    Recent Projects
+                </button>
+                <ul class="dropdown-menu" id="recent-projects" style="width: 400px;">
+                    
+                </ul>
+        </div>
+
+        <section class="row gap-2 gap-md-0 mb-3">
+
+                <div class="col-md-9">
+                    <div class="d-flex">
+                        <h4 class="text-uppercase text-muted text-center text-sm-start">Project Overview</h4> <i class="bi bi-arrow-clockwise cursor-pointer fs-5 ms-3" onclick="resetApp()"></i>
+
+                    </div>
+                </div>
+
+                <div class="col-3 col-md-3 d-flex justify-content-between p-0">
+                    <div class="me-2">
+                        <button id="today-report-btn" class="btn btn-purple btn-sm d-none" type="button" data-bs-toggle="offcanvas" data-bs-target="#offcanvasBottom" aria-controls="offcanvasBottom" onclick="todayReport()"><i class="bi bi-clipboard-data-fill"></i> Today's Report</button>
+
+                    </div>
+                    <div>
+                        <button type="button" class="btn btn-warning btn-sm" data-bs-toggle="modal" data-bs-target="#exampleModal"><i class="bi bi-search me-1"></i> Search (Ctr + K)</button>
+
+                    </div>
+
+                    <div>
+                        <button id="canvasbtn" class="btn btn-primary btn-sm my-auto d-none"  type="button" data-bs-toggle="offcanvas" data-bs-target="#offcanvasRight" aria-controls="offcanvasRight"><i class="bi bi-plus-lg"></i> Add Project</button>
+                        <button id="canvasbtnTask" class="btn btn-primary btn-sm my-auto d-none"  type="button" data-bs-toggle="offcanvas" data-bs-target="#offcanvasTask" aria-controls="offcanvasTask"><i class="bi bi-plus-lg"></i> Open Task</button>
+
+                        <button class="btn btn-primary btn-sm my-auto" onclick="openOffcanvas('project')" id="add-meeting-button"><i class="bi bi-plus-lg"></i> Project</button>
+
+                    </div>
+
+                </div>
+                
+
+        </section>
+
+        <!-- <ul id="recent-projects"></ul> -->
+
+        <!-- <button>Add Project</button> -->
+
+        <!-- <script>
+            fetch('https://fakestoreapi.com/products/1')
+            .then(response => response.json())
+            .then(json => console.log(json,"ARRRRRRRRUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNN"))
+        </script> -->
+         <!-- <script>
+            fetch('http://127.0.0.1:8000/emails/')
+            .then(response => response.json())
+            .then(json => console.log(json,"response"))
+            fetch("http://127.0.0.1:8000/emails/", {
+    method: "GET",
+    credentials: "include"  // send session cookie
+})
+.then(res => res.json())
+.then(data => console.log(data))
+
+        </script> -->
+
+        <!-- <script>
+            fetch("http://127.0.0.1:8000/api/token/", {
+                method: "POST",
+                headers: { "Content-Type": "application/json" },
+                body: JSON.stringify({
+                    username: "basha.zentegra@gmail.com",
+                    password: "basha@12345"
+                })
+            })
+            .then(r => r.json())
+            .then(tokens => {
+                console.log(tokens) // { access: "...", refresh: "..." }
+            });
+
+            fetch("http://127.0.0.1:8000/emails/", {
+                headers: {
+                    "Authorization": "Bearer " + ACCESS_TOKEN
+                }
+            })
+            .then(r => r.json())
+            .then(data => console.log("EMAILS:", data));
+        </script> -->
+
+        <!-- <script>
+
+let imapU = ''
+let imapP = ''
+let page = 1;
+
+            if(localStorage.getItem("imap-username")){
+                imapU = localStorage.getItem("imap-username")
+                imapP =  localStorage.getItem("imap-pass")
+            } 
+            
+        
+        async function loadEmails(page) {
+            // Step 1 → get token
+            const tokenRes = await fetch("http://127.0.0.1:8000/api/token/", {
+                method: "POST",
+                headers: { "Content-Type": "application/json" },
+                body: JSON.stringify({
+                    username: imapU,
+                    password: imapP
+                })
+            });
+
+            const tokenData = await tokenRes.json();
+            const access = tokenData.access;
+
+            // Step 2 → use token to call emails API
+            const emailRes = await fetch(`http://127.0.0.1:8000/emails/?page=${page}`, {
+                headers: {
+                    "Authorization": "Bearer " + access
+                }
+            });
+
+            const emailData = await emailRes.json();
+            console.log("Emails:", emailData);
+        }
+
+        loadEmails(page);
+
+document.getElementById("next-btn").onclick = () => {
+    page++;
+
+    loadEmails(page);
+};
+
+document.getElementById("prev-btn").onclick = () => {
+    if (page > 1) {
+        page--;
+    
+        loadEmails(page);
+    }
+};
+        </script> -->
+
+        
+
+        <section>
+            <!-- <button onclick="sendEmail()">send mail</button> -->
+            <!-- <iframe src="https://render-email.onrender.com/" height="800px" width="1000px" frameborder="0"></iframe> -->
+            <!-- <iframe src="https://creator.zoho.com/zentegra/zenworkr/#Form:Team?recLinkID=1141991000005984003" frameborder="0"></iframe> -->
+
+             <!-- <iframe height='500px' width='100%' frameborder='0' allowTransparency='true' scrolling='auto' src='https://creatorapp.zohopublic.com/zentegra/zenworkr/form-embed/Team/#Report:All_Teams/1141991000005984003/QesrRS6hEpww5OC5am4RW5TwxpktMKvACGnMFnXRvShs30WJFfgx2Sj7jOwz6bxaZh1UKvYqpduQhhxNq1eDb2wmxV6t6g2RxR5H'></iframe>
+
+             <br>-->
+             
+             <!-- <iframe src="https://creatorapp.zohopublic.com/zentegra/zenworkr/#Form:Team?recLinkID=1141991000005984003&viewLinkName=All_Teams&privateLink=uyRFZVfEY592FsDaz8xQDT3ChraQbe6QzZrMptTJHW156kHXxTTzUdtV406eMWBFQrg4EkYKKeu6kr4GzpwMgMMRY5sZnCnqNFhU" frameborder="0"></iframe>  -->
+
+             <!-- <iframe height='500px' width='100%'  src="https://creatorapp.zohopublic.com/zentegra/zenworkr/Team/record-edit/All_Teams/1141991000005984003/uyRFZVfEY592FsDaz8xQDT3ChraQbe6QzZrMptTJHW156kHXxTTzUdtV406eMWBFQrg4EkYKKeu6kr4GzpwMgMMRY5sZnCnqNFhU" frameborder="0"></iframe>  -->
+
+             <!-- <iframe height='500px' width='100%' frameborder='0' allowTransparency='true' scrolling='auto' src='https://creatorapp.zohopublic.com/zentegra/zenworkr/report-embed/All_Teams/uyRFZVfEY592FsDaz8xQDT3ChraQbe6QzZrMptTJHW156kHXxTTzUdtV406eMWBFQrg4EkYKKeu6kr4GzpwMgMMRY5sZnCnqNFhU'></iframe> -->
+
+             
+        </section>
+
+  <!-- <button id="updateBtn">Add Query Params</button> -->
+
+        
+        <section class="project-overview row g-3">
+
+            <div class="col-6 col-sm-6 col-lg">
+                <div class="my-card p-2 px-3 p-md-4 purple">
+                    <p class="text-uppercase text-muted fw-semibold mb-1">Total Projects</p>
+                    <h4 id="total-projects-count">0</h4>
+                </div>
+            </div>
+
+            <div class="col-6 col-sm-6 col-lg">
+                <div class="my-card p-2 px-3 p-md-4 blue" onclick="kpiClick('approved')">
+                    <p class="text-uppercase text-muted fw-semibold mb-1">Approved Tasks</p>
+                    <h4 id="approved-tasks-count">0</h4>
+                </div>
+            </div>
+
+            <div class="col-6 col-sm-6 col-lg">
+                <div class="my-card p-2 px-3 p-md-4 green" onclick="kpiClick('completed')"> 
+                    <p class="text-uppercase text-muted fw-semibold mb-1">Completed Tasks</p>
+                    <h4 id="closed-task-count">0</h4>
+                </div>
+            </div>
+
+
+            <div class="col-6 col-sm-6 col-lg">
+                <div class="my-card p-2 px-3 p-md-4 yellow" onclick="kpiClick('in-progress')">
+                    <p class="text-uppercase text-muted fw-semibold mb-1">Open Tasks</p>
+                    <h4 id="open-task-count">0</h4>
+                </div>
+            </div>
+
+            <div class="col-6 col-sm-6 col-lg">
+                <div class="my-card p-2 px-3 p-md-4 red" onclick="kpiClick('rejected')">
+                    <p class="text-uppercase text-muted fw-semibold mb-1">Rejected Tasks</p>
+                    <h4 id="rejected-task-count">0</h4>
+                </div>
+            </div>
+        </section>
+
+        
+        <!-- all projects  -->
+        <section class="mt-4">
+            <div class="d-flex justify-content-between">
+                <h4 class="text-uppercase text-muted me-5">All Projects</h4>
+
+
+                <div class="d-flex align-items-center">
+                    <div id="paginationspinner" class="spinner-border spinner-border-sm mb-3 me-3 text-primary d-none" role="status">
+                        <span class="visually-hidden">Loading...</span>
+                    </div>
+                    <nav aria-label="Page navigation">
+                        
+                        <ul class="pagination " id="pagination"></ul>
+                    </nav>
+                </div>
+            </div>
+            <!-- <div ></div> -->
+            <div style="overflow-x: auto; width: 100%;">
+                <table id="projects-table" class="table  btable table-rounded" style="min-width:fit-content; white-space: nowrap;">
+                    <thead style="background-color: #2a384d;">
+                        <tr style="background-color: #2a384d;">
+                            <th  class="text-uppercase text-muted small">Project Name</th>
+                            <th  class="text-uppercase text-muted small text-center">Status</th>
+                            <th  class="text-uppercase text-muted small text-center">Priority</th>
+                            <th  class="text-uppercase text-muted small text-center">Account Manager</th>
+                            <th  class="text-uppercase text-muted small text-center">Service Owner</th>
+                            <th  class="text-uppercase text-muted small text-center">Type</th>
+                            <th  class="text-uppercase text-muted small text-center">Contact</th>
+                            <th  class="text-uppercase text-muted small text-center">Account</th>
+
+                            <th  class="text-uppercase text-muted small text-center">Preparer</th>
+                            <th  class="text-uppercase text-muted small text-center">Reviewer</th>
+                            <th  class="text-uppercase text-muted small text-center">Peer Reviewer</th>
+
+                            <th  class="text-uppercase text-muted small text-center">Start Date</th>
+                            <th  class="text-uppercase text-muted small text-center">End Date</th>
+                        </tr>
+                    </thead>
+                    <tbody id="all-projects-tbody">
+
+                    </tbody>
+                </table>
+            </div>
+        </section>
+        
+    </main>
+
+
+    <!-- Single Bootstrap Modal -->
+<div class="modal fade" id="myModal" tabindex="-1" aria-hidden="true">
+  <div class="modal-dialog modal-fullscreen">
+    <div class="modal-content">
+      <div class="modal-body " id="modalBody" style="scrollbar-width: thin; scrollbar-color: #888 #f1f1f1;">
+
+        <section class="my- mx-1 mb-0 ">
+            
+<div class="card-body" style="overflow-y: hidden; max-height: max-content;  overflow-x: hidden; scrollbar-width: thin; scrollbar-color: #888 #f1f1f1;">
+    <!-- Tabs Navigation -->
+
+    
+     <div class="d-flex align-items-center">
+            <button id="cls-btn-main-modal" onclick="closeProjectModal()" type="button" class="btn" data-bs-dismiss="modal">
+                 <i class="bi bi-arrow-left"></i>
+            </button>
+            
+            <div class="d-flex">
+                <h5 class="modal-title text-uppercase lead" id="modalTitle">Dynamic Title</h5>
+                <button class="btn" onclick="switchProject(event)"><i class="bi bi-caret-down-fill"></i></button>
+            </div>
+
+            <div id="accountName-div">
+            </div>
+            
+            <div class="ms-auto">
+                <button id="project-cancel-btn" onclick="openOffcanvas('cancalationform')" class="btn text-danger btn-sm d-none"><i class="bi bi-x-lg text-danger"></i> Cancelation</button>
+                <button onclick="openOffcanvas('editproject')" class="btn"><i class="bi bi-pencil-square fs-5 text-primary"></i></button>
+            </div>
+     </div>
+
+
+    <ul class="nav nav-tabs p-2" role="tablist" style="background-color:white; border-radius: 10px;">
+
+        <li class="nav-item">
+            <button class="nav-link " data-bs-toggle="tab" data-bs-target="#chart-report"><i class="me-1 fs-md-6 bi bi-clipboard2-data"></i> Reports</button>
+        </li>
+
+        <li class="nav-item">
+            <button class="nav-link " data-bs-toggle="tab" data-bs-target="#phases"><i class="me-1  fs-md-6 bi  bi-speedometer2"></i> Phases</button>
+        </li>
+        <li class="nav-item">
+            <button class="nav-link d-none" data-bs-toggle="tab" data-bs-target="#task-lists"><i class="me-1  fs-md-6 bi bi-list-ol"></i> Task Lists</button>
+        </li>
+        <li class="nav-item">
+            <button id="task-nav-button" class="nav-link active" data-bs-toggle="tab" data-bs-target="#tasks"><i class="me-1 fs-md-6 bi bi-card-checklist"></i> Tasks</button>
+        </li>
+        <li class="nav-item">
+            <button id="itr-btn" class="nav-link" data-bs-toggle="tab" data-bs-target="#itr-module"><i class="me-1 fs-md-6 bi bi-card-checklist"></i> ITR</button>
+        </li>
+
+        <li class="nav-item">
+            <button class="nav-link" data-bs-toggle="tab" data-bs-target="#discussions"><i class="me-1 fs-md-6 bi bi-chat-dots"></i> Notes</button>
+        </li>
+
+        <li class="nav-item">
+            <button class="nav-link" data-bs-toggle="tab" data-bs-target="#meetings"><i class="me-1 fs-md-6 bi bi-calendar-event"></i> Meetings</button>
+        </li>
+        <li class="nav-item">
+            <button id="team-btn" class="nav-link" data-bs-toggle="tab" data-bs-target="#team"><i class="me-1 fs-md-6 bi bi-people-fill"></i> Team</button>
+        </li>
+        <li class="nav-item">
+            <button class="nav-link" data-bs-toggle="tab" data-bs-target="#timesheet"><i class="me-1 fs-md-6 bi bi-journal-text"></i> Timesheet</button>
+        </li>
+        <li class="nav-item">
+            <button class="nav-link" data-bs-toggle="tab" data-bs-target="#files"><i class="me-1 fs-md-6 bi bi-folder"></i> Files</button>
+        </li>
+        <li class="nav-item">
+            <button class="nav-link d-none" data-bs-toggle="tab" data-bs-target="#expenses"><i class="me-1 fs-md-6 bi bi-cash-stack"></i> Expenses</button>
+        </li>
+        <li class="nav-item">
+            <button id="budget-btn"  class="nav-link" data-bs-toggle="tab" data-bs-target="#budget"><i class="me-1 fs-md-6 bi bi-graph-up"></i> Budget</button>
+        </li>
+        
+        <li class="nav-item">
+            <button class="nav-link" data-bs-toggle="tab" data-bs-target="#emails-module"><i class="me-1 fs-md-6 bi bi-envelope-paper"></i> Email</button>
+        </li>
+         <li class="nav-item">
+            <button id="timeline-btn" class="nav-link" data-bs-toggle="tab" data-bs-target="#timeline-module"><i class="me-1 fs-md-6 bi bi-signpost-split"></i> Timeline</button>
+        </li>
+
+        
+        
+
+    </ul>
+
+    <!-- Tabs Content -->
+    <div class="tab-content mt-3">
+
+
+        <div class="tab-pane fade" id="phases">
+            <div class="d-flex justify-content-end">
+                <button class="btn btn-primary btn-sm my-auto mb-2" onclick="openOffcanvas('phase')" id="add-meeting-button"><i class="bi bi-plus-lg"></i> Phase</button>
+            </div>
+            <section>
+                <table class="table table-rounded btable">
+
+                    <thead>
+                        <tr>
+                            <th class="text-uppercase text-muted small">Phase Name</th>
+                            <th class="text-uppercase text-muted small">Status</th>
+                            <th class="text-uppercase text-muted small">Priority</th>
+                            <th class="text-uppercase text-muted small">Owner</th>
+                            <th class="text-uppercase text-muted small">Start Date</th>
+                            <th class="text-uppercase text-muted small">End Date</th>
+                        </tr>
+                    </thead>
+                    <tbody id="phases-tbody">
+
+                    </tbody>
+
+                </table>
+            </section>
+
+            <article id="newphasesection">
+
+            </article>
+        </div>
+
+        <div class="tab-pane fade" id="task-lists">
+            <div class="row mb-3">
+                    <div class="col-1 col-md-5 d-none d-md-block">
+
+                    </div>
+                    <div class="col-3 col-md-2">
+                        
+                    </div>
+                    <div class=" col-6 col-md-4">
+                        <div class="position-relative">
+                            <input type="text" id="searchInputTask-list" class="form-control" placeholder="Search tasks lists..." autocomplete="off">
+                            <ul id="dropdownTask-list" class="list-group position-absolute w-100 dropdownList" style="z-index: 1550; display: none;"></ul>
+
+                        </div>
+                    </div>
+                    
+                    <div class="col-3 col-md-1 d-flex justify-content-end">
+                        <div>
+                            <button class="btn btn-primary btn-sm my-auto" onclick="openOffcanvas('task')" id="add-meeting-button"><i class="bi bi-plus-lg"></i> Task list</button>
+                        </div>
+                    </div>
+            </div>
+            <section>
+                <table id="tasklist-table" class="table table-rounded btable">
+
+                    <thead>
+                        <tr>
+                            <th class="text-uppercase text-muted small">Task List Name</th>
+                            <th class="text-uppercase text-muted small">Status</th>
+                            <th class="text-uppercase text-muted small">Priority</th>
+                        </tr>
+                    </thead>
+                    <tbody id="task-list-tbody">
+
+                    </tbody>
+
+                </table>
+            </section>
+            
+            
+        </div>
+        
+        <div class="tab-pane fade show active mx-" id="tasks">
+            <section class="">
+
+                <div class="kpi-wrapper">
+                    <div id="kpiContainer" class="kpi-container">
+                        <!-- Cards generated by JavaScript -->
+                    </div>
+                </div>
+
+                <div class="row mb-3">
+                    <div class="col-1 col-md-4">
+                        <!-- <button class="btn btn-danger btn-sm" >Assign Employee</button> -->
+                        <!-- <div class="dropdown">
+                            <button class="btn btn-success btn-sm dropdown-toggle d-none" type="button" data-bs-toggle="dropdown" aria-expanded="false">
+                                Assign Employee
+                            </button>
+                            <ul class="dropdown-menu" id="asign-emp-dropdown" ondblclick="">
+                                <li><a class="dropdown-item" onclick="bulkAsign()">Action</a></li>
+                                
+                            </ul>
+                        </div> -->
+
+                        <div id="emp-timesheet-cards">
+
+                            
+
+                        </div>
+
+                    </div>
+                    <div class=" col-3 col-md-2">
+                        <div class="position-relative">
+
+                            <input type="text" id="searchInputTask" class="form-control" placeholder="Search tasks..." autocomplete="off">
+                            <ul id="dropdownListTasks" class="list-group position-absolute w-100 dropdownList" style="z-index: 1550; display: none;"></ul>
+
+                        </div>
+                    </div>
+                    <div class="col-3 col-md-2">
+                        <select id="taskMemberFilter" class="form-select">
+                            
+                        </select>
+                    </div>
+                    <div class="col-3 col-md-2">
+                        <select id="taskFilter" class="form-select">
+                            <option value="all">All Tasks</option>
+                            <option class="bg-status not-started" value="Not Started">Not Started</option>
+                            <option class="bg-status in-progress" value="In Progress">In Progress</option>
+                            <option class="bg-status completed" value="Completed">Completed</option>
+                            <option class="bg-status approved" value="Approved">Approved</option>
+                            <option class="bg-status rejected" value="Rejected">Rejected</option>
+                            <option class="bg-status not-started" value="Canceled">Canceled</option>
+                        </select>
+                    </div>
+                    <div class="col-3 col-md-2 d-flex justify-content-end align-items-center">
+                        <div>
+                            <span class="me-3  fs-5"><i class="bi bi-arrow-clockwise " onclick="refreshTask(this)"></i></span>
+                            <button class="btn btn-primary btn-sm my-auto" onclick="openOffcanvas('task')" id="add-meeting-button"><i class="bi bi-plus-lg"></i> Task</button>
+                        </div>
+                    </div>
+                </div>
+
+                
+
+                <!-- <div class="d-none d-flex justify-content-end">
+                    <button class="btn btn-primary btn-sm my-auto" onclick="openOffcanvas('task')" id="add-meeting-button"><i class="bi bi-plus-lg"></i> Add Task</button>
+
+                </div> -->
+
+                <div style="overflow-x: auto; width: 100%;">
+                    <table id="task-table" class="table table-rounded btable" style="min-width:fit-content; white-space: nowrap;" >
+
+                    <thead class="">
+                        <tr>
+                            <th class="text-uppercase fw-semibold small text-muted"></th>
+                            <th class="text-uppercase fw-semibold small text-muted">Task Name</th>
+                            <th class="text-uppercase fw-semibold small text-muted">Description</th>
+                            <th class="text-uppercase fw-semibold small text-center text-muted">Notes</th>
+                            <th class="text-uppercase fw-semibold small text-center text-muted">Status</th>
+                            <th class="text-uppercase fw-semibold small text-center text-muted">Priority</th>
+                            <th class="text-uppercase fw-semibold small text-center text-muted">Owner</th>
+                            
+                            <th class="text-uppercase fw-semibold small text-center text-muted">Action</th>
+                            <th class="text-uppercase fw-semibold small text-center text-muted">Worked</th>
+                            <th class="text-uppercase fw-semibold small text-center text-muted">Budgeted</th>
+
+                            <th class="text-uppercase fw-semibold small text-center text-muted">Task Date</th>
+                            <th class="text-uppercase fw-semibold small text-center text-muted">Start Time</th>
+                            <th class="text-uppercase fw-semibold small text-center text-muted">End Time</th>
+                            
+                            
+                        </tr>
+                    </thead>
+                    <tbody id="tasks-tbody" class="" >
+
+                    </tbody>
+
+                </table>
+                </div>
+                
+                
+            </section>
+        </div>
+
+        <div class="tab-pane fade" id="itr-module">
+           
+            
+           
+        </div>
+
+        <div class="tab-pane fade" id="timeline-module">
+           <section id="timeline-history" class="p-5 bg-white rounded-3 timeline">
+
+
+           </section>
+        </div>
+
+
+        <div class="tab-pane fade mx-4" id="meetings">
+            <section>
+                <div class="d-flex justify-content-end">
+                    <button class="btn btn-primary btn-sm my-auto" onclick="openOffcanvas('meeting')" id="add-meeting-button"><i class="bi bi-plus-lg"></i>  Meetings</button>
+                </div>
+                <h5>Upcomming Meetings</h5>
+
+                <table class="table table-rounded btable">
+                    <thead class="">
+                        <tr>
+                            <th class="text-uppercase fw-semibold small text-muted">Meeting Name</th>
+                            <th class="text-uppercase fw-semibold small text-muted">Description</th>
+                            <th class="text-uppercase fw-semibold small text-center text-muted">Date</th>
+                            <th class="text-uppercase fw-semibold small text-center text-muted">Attendees</th>
+                        </tr>
+                    </thead>
+                    <tbody id="upcomming-meetings">
+
+                    </tbody>
+                </table>
+            </section>
+            <section>
+
+                <h5>Completed Meetings</h5>
+
+                <table class="table table-rounded btable">
+
+                    <thead class="">
+                        <tr>
+                            <th class="text-uppercase fw-semibold small text-muted">Meeting Name</th>
+                            <th class="text-uppercase fw-semibold small text-muted">Description</th>
+                            <th class="text-uppercase fw-semibold small text-center text-muted">Date</th>
+                            <th class="text-uppercase fw-semibold small text-center text-muted">Attendees</th>
+                            
+                        </tr>
+                    </thead>
+                    <tbody id="completed-meetings">
+
+                        
+
+                    </tbody>
+
+                </table>
+
+            </section>
+        </div>
+
+        
+
+        <div class="tab-pane fade mx-4" id="team">
+            <section class="mb-3">
+                <div id="add-member-button"  class="d-flex justify-content-end">
+                    
+                </div>
+            </section>
+            <section class="row  g-4" id="team-list">
+
+            </section>
+        </div>
+
+        <div class="tab-pane fade mx-4" id="timesheet">
+            <section id="timesheet-list">
+
+            </section>
+        </div>
+
+        <div class="tab-pane fade mx-" id="files">
+            <section id="files-list">
+
+                <h6>
+                    <i class="bi bi-folder"></i>
+                    <span id="root-project-folder" class="ms-2">Project Name</span>
+                    <i class="bi bi-chevron-right"></i> 
+                    <span id="current-opened-folder"></span>
+                    <!-- <span id="current-nested-folder"></span> -->
+                </h6>
+            </section>
+            <section class="row g-3" >
+
+                <aside class="col-3 bg-whit" style="height: 80vh; overflow-y: scroll; overflow-x: hidden; scrollbar-width: thin;">
+                    <div class="accordion accordion-flush" id="accordionPanelsStayOpenExample">
+
+                        
+<!-- 
+                        <div class="accordion-item">
+                            <h2 class="accordion-header">
+                                <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#panelsStayOpen-project-files" aria-expanded="false" aria-controls="panelsStayOpen-project-files">
+                                    <i class="bi bi-folder"></i> <small class="ms-2 mb-0">PROJECT FILES</small>
+                                </button>
+                            </h2>
+                            <div id="panelsStayOpen-project-files" class="accordion-collapse collapse">
+                                <div class="accordion-body">
+                                    Project files will be added here...
+                                </div>
+                            </div>
+                        </div> -->
+
+                        <!-- <div class="accordion-item">
+                            <h2 class="accordion-header">
+                                <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#panelsStayOpen-phase-files" aria-expanded="false" aria-controls="panelsStayOpen-phase-files">
+                                    <i class="bi bi-folder"></i> <small class="ms-2 mb-0">PHASE FILES</small>
+                                </button>
+                            </h2>
+                            <div id="panelsStayOpen-phase-files" class="accordion-collapse collapse">
+                                <div class="accordion-body">
+                                    Phase files will be added here...
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="accordion-item">
+                            <h2 class="accordion-header">
+                                <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#panelsStayOpen-tasklist-files" aria-expanded="false" aria-controls="panelsStayOpen-tasklist-files">
+                                    <i class="bi bi-folder"></i> <small class="ms-2 mb-0">TASK LIST FILES</small>
+                                </button>
+                            </h2>
+                            <div id="panelsStayOpen-tasklist-files" class="accordion-collapse collapse">
+                                <div class="accordion-body">
+                                    Tasklist files will be added here...
+                                </div>
+                            </div>
+                        </div> -->
+
+                        <!-- <div class="accordion-item">
+                            <h2 class="accordion-header" onclick="document.getElementById('current-opened-folder').innerText = 'Task Files'">
+                                <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#panelsStayOpen-task-files" aria-expanded="false" aria-controls="panelsStayOpen-task-files">
+                                    <i class="bi bi-folder"></i> <small class="ms-2 mb-0">TASK FILES</small>
+                                </button>
+                            </h2>
+                            <div id="panelsStayOpen-task-files" class="accordion-collapse collapse">
+                                <div id="task-files" class="accordion-body  pe-0 py-1 accordion-flush">
+                                    Task files will be added here...
+                                </div>
+                            </div>
+                        </div> -->
+
+
+
+                        <div class="accordion-item">
+                            <h2 class="accordion-header" onclick="filesRightSideView('fromClients')">
+                                <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#panelsStayOpen-filesfromClients" aria-expanded="false" aria-controls="panelsStayOpen-filesfromClients">
+                                    <i class="bi bi-folder"></i> <small class="ms-2 mb-0">FILES FROM CLIENT</small>
+                                </button>
+                            </h2>
+                            <div id="panelsStayOpen-filesfromClients" class="accordion-collapse collapse">
+                                <div id="filesfromClients" class="accordion-body  pe-0 py-1 accordion-flush">
+                                    
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="accordion-item">
+                            <h2 class="accordion-header" onclick="filesRightSideView('toClients')">
+                                <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#panelsStayOpen-filestoClients" aria-expanded="false" aria-controls="panelsStayOpen-filestoClients">
+                                    <i class="bi bi-folder"></i> <small class="ms-2 mb-0">FILES TO CLIENT</small>
+                                </button>
+                            </h2>
+                            <div id="panelsStayOpen-filestoClients" class="accordion-collapse collapse">
+                                <div id="filestoClients" class="accordion-body  pe-0 py-1 accordion-flush">
+                                    
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="accordion-item">
+                            <h2 class="accordion-header" onclick="filesRightSideView('workingFiles')">
+                                <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#panelsStayOpen-workingFiles" aria-expanded="false" aria-controls="panelsStayOpen-workingFiles">
+                                    <i class="bi bi-folder"></i> <small class="ms-2 mb-0">WORKING FILES</small>
+                                </button>
+                            </h2>
+                            <div id="panelsStayOpen-workingFiles" class="accordion-collapse collapse">
+                                <div id="workingFiles" class="accordion-body  pe-0 py-1 accordion-flush">
+                                    Task files will be added here...
+                                </div>
+                            </div>
+                        </div>
+                
+                    </div>
+
+                </aside>
+
+                <article class="col-9 bg-white p-4 rounded">
+
+                    <section class="mb-3 d-flex justify-content-between">
+                        <div class="input-group" style="max-width: 300px;">
+                            <span class="input-group-text bg-white border-end-0"><i class="bi bi-search text-secondary"></i></span>
+                            <input type="text" class="form-control border-start-0" placeholder="Search your files">
+                        </div>
+
+                        <div class="text-center" id="upload-file-div" >
+                            
+                        </div>
+                    </section>
+
+                    <table class="table table-rounded btable">
+
+                        <thead class="">
+                            <tr>
+                                <th class="text-uppercase fw-semibold small text-muted"> </th>
+                                <th class="text-uppercase fw-semibold small text-muted">Name</th>
+                                <th class="text-uppercase fw-semibold small text-muted">Date added</th>
+                                <th class="text-uppercase fw-semibold small text-muted">Added by</th>
+                                <th class="text-uppercase fw-semibold small text-muted"> </th>
+                                <th class="text-uppercase fw-semibold small text-muted"> </th>
+                                <th class="text-uppercase fw-semibold small text-muted"> </th>
+
+                            </tr>
+                        </thead>
+                        <tbody id="files-table-view">
+
+                            <tr>
+                                <td colspan="6"><p class="lead text-center text-muted">Choose the files to display...</p></td>
+                            </tr>
+                            
+
+                        </tbody>
+
+                    </table>
+
+                </article>
+
+                
+            </section>
+        </div>
+
+        <div class="tab-pane fade mx-4" id="expenses">
+            <section>
+                <table class="table btable table-rounded">
+
+                    <thead>
+                        <tr>
+                            <th class="text-uppercase text-muted small">Amount</th>
+                            <th class="text-uppercase text-muted small">Billing Type</th>
+                            <th class="text-uppercase text-muted small">Category</th>
+                            <th class="text-uppercase text-muted small">Description</th>
+                            <th class="text-uppercase text-muted small">Expense Date</th>
+                            
+                        </tr>
+                    </thead>
+                    <tbody id="expense-body">
+
+                    </tbody>
+
+                </table>
+            </section>
+        </div>
+
+        <div class="tab-pane fade mx-4" id="budget">
+            <section id="budget-body">
+                <!-- <table class="table btable table-rounded">
+                    <thead>
+                        <tr>
+                            <th class="text-uppercase text-muted small">Phase Name</th>
+                            <th class="text-uppercase text-muted small">Time (Hrs)</th>
+                            <th class="text-uppercase text-muted small">Employee</th>
+                            <th class="text-uppercase text-muted small">Hourly Rate</th>
+                            <th class="text-uppercase text-muted small">Amount</th>
+                            <th class="text-uppercase text-muted small">Mockup (%)</th>
+                            <th class="text-uppercase text-muted small">Estimated Cost</th>
+                        </tr>
+                    </thead>
+                    <tbody >
+                    </tbody>
+                </table>
+                <div class="row g-3" id="budget-cards">
+                </div> -->
+            </section>
+        </div>
+
+        
+
+        <div class="tab-pane fade mx-4" id="discussions">
+            <section>
+
+<div class="container-fluid mt-0">
+
+    <div class="notes-header d-flex justify-content-between align-items-center">
+        <h5 class="mb-0">Notes <button onclick="openOffcanvas('notes')" class="btn btn-sm btn-dark ms-2 py-1">+</button></h5> 
+
+        <div class="dropdown">
+            <button id="notes-category-button" class="btn btn-sm btn-light dropdown-toggle"
+                    data-bs-toggle="dropdown">
+                Project Notes
+            </button>
+
+            <ul class="dropdown-menu dropdown-menu-end" role="tablist">
+                <li class="cursor-pointer" onclick='document.getElementById("notes-category-button").innerText = "Project Notes"' >
+                    <a  class="dropdown-item active"
+                        data-bs-toggle="tab" data-bs-target="#all-notes-tab" 
+                    >
+                        Project Notes
+                    </a>
+                </li>
+
+                <li class="cursor-pointer" onclick='document.getElementById("notes-category-button").innerText = "Task Notes"' >
+                    <a class="dropdown-item " 
+                    data-bs-toggle="tab" data-bs-target="#itr-notes" >
+                        Task Notes
+                    </a>
+                </li>
+
+                <li class="cursor-pointer" >
+                    <a class="dropdown-item"
+                     data-bs-toggle="tab" data-bs-target="#account-notes" onclick="populateAccountNotes()">
+                        Account Notes
+                    </a>
+                </li>
+            </ul>
+        </div>
+    </div>
+
+  <!-- Tab content -->
+  <div class="tab-content mt-2">
+    <div class="tab-pane fade show active" id="all-notes-tab">
+      <article class="row g-3" id="all-notes-sec" >
+                        
+        </article>
+    </div>
+    <div class="tab-pane fade" id="account-notes">
+     <article class="row g-3" id="account-notes-sec" >
+                        
+        </article>
+    </div>
+    <div class="tab-pane fade" id="itr-notes">
+      <article class="" id="task-notes-sec">
+            
+        </article>
+    </div>
+  </div>
+
+</div>
+            </section>
+        </div>
+
+        <div class="tab-pane fade mx-" id="emails-module">
+            <section class="text-end mb-2">
+                <button class="btn btn-sm btn-purple" onclick="displayCompose()">Compose <i class="bi bi-pencil-fill"></i></button>
+            </section>
+            <div class="row">
+                <!-- LEFT: Email List -->
+                <div class="col-md-4">
+                    <div class="card shadow-sm">
+                        <section class="text-center py-2" >
+                            <button id="inb-btn" class="btn btn-sm btn-purple" onclick="switchInbox()">inbox</button>
+                            <button id="snt-btn" class="btn btn-sm " onclick="switchInbox()">sent</button>
+                        </section>
+                        
+                        <div  class="card-body p-2 " >
+                            <div id="inbox-div" class="">
+                                <section id="email-list" style="height: 75vh; overflow-y: auto; scrollbar-width: thin;">
+                                    <div class="text-center mt-5 pt-5">
+                                        <img class=""  src="https://cdn-icons-png.flaticon.com/128/2989/2989993.png" width="100px" style="opacity: 0.6;" alt="">
+                                        <p class="lead">Loading emails...</p>
+                                    </div>
+                                </section>
+                                <section class="text-center">
+                                    <button class="btn btn-secondary btn-sm me-2" id="prev-btn">Prev</button>
+                                    <button class="btn btn-primary btn-sm" id="next-btn">Next</button>
+                                </section>
+                            </div>
+
+
+                            <div id="sent-email-div" class="d-none">
+                                <section id="sent-email-list" style="height: 75vh; overflow-y: auto; scrollbar-width: thin;">
+                                    <div class="text-center mt-5 pt-5">
+                                        <img class=""  src="https://cdn-icons-png.flaticon.com/128/2989/2989993.png" width="100px" style="opacity: 0.6;" alt="">
+                                        <p class="lead">Loading emails...</p>
+                                    </div>
+                                </section>
+                                <section class="text-center">
+                                    <button class="btn btn-secondary btn-sm me-2" id="sent-prev-btn">Prev</button>
+                                    <button class="btn btn-primary btn-sm" id="sent-next-btn">Next</button>
+                                </section>
+                            </div>
+                        </div>
+
+                    </div>
+                </div>
+
+                <!-- RIGHT: Email Details -->
+                <div class="col-md-8">
+                    <div class="card shadow-sm" id="email-details" style="display: none;">
+                        <div class="card-header bg-white">
+                            <button class="btn btn-outline-primary btn-sm" id="back-btn">← Back</button>
+                        </div>
+
+                        <!-- <div class="card-body">
+                            <h4 id="detail-subject"></h4>
+                            <p><strong>From:</strong> <span id="detail-from"></span></p>
+                            <p id="detail-to"></p>
+                            <p><strong>Date:</strong> <span id="detail-date"></span></p>
+                            <hr>
+                            <p id="detail-body" class="mt-3"></p>
+                        </div> -->
+<div class="email-card">
+
+        <!-- Header -->
+        <div class="email-header">
+
+            <div class="d-flex justify-content-between align-items-start">
+                <div class="email-subject" id="subject">
+                    Loading subject...
+                </div>
+
+                <span class="badge-custom">
+                    <i class="bi bi-envelope"></i> Email
+                </span>
+            </div>
+
+            <div class="sender-row mt-4">
+
+                <div class="sender-info">
+                    <div class="avatar" id="avatar">
+                        A
+                    </div>
+
+                    <div>
+                        <div class="fw-bold" id="fromEmail">
+                            sender@example.com
+                        </div>
+
+                        <small class="text-muted">
+                            to <span id="toEmail"></span>
+                        </small>
+                    </div>
+                </div>
+
+                <div class="text-end">
+                    <div class="meta-label">Received</div>
+                    <div class="meta-value" id="emailDate"></div>
+                </div>
+
+            </div>
+
+            <!-- Extra Details -->
+            <div class="detail-grid mt-4">
+
+                <div class="detail-item">
+                    <span class="meta-label">CC:</span>
+                    <span class="meta-value" id="ccEmail"></span>
+                </div>
+
+                <div class="detail-item">
+                    <span class="meta-label">BCC:</span>
+                    <span class="meta-value" id="bccEmail"></span>
+                </div>
+
+                <div class="detail-item">
+                    <span class="meta-label">UID:</span>
+                    <span class="meta-value" id="uid"></span>
+                </div>
+
+            </div>
+
+        </div>
+
+        <!-- Body -->
+        <div class="email-body" id="emailText">
+            Loading email body...
+        </div>
+
+        <!-- Footer -->
+        <div class="email-footer d-flex gap-3">
+
+            <button class="btn btn-primary action-btn">
+                <i class="bi bi-reply"></i> Reply
+            </button>
+
+            <button class="btn btn-outline-secondary action-btn">
+                <i class="bi bi-reply-all"></i> Reply All
+            </button>
+
+            <button class="btn btn-outline-danger action-btn">
+                <i class="bi bi-trash"></i> Delete
+            </button>
+
+        </div>
+
+    </div>
+                    </div>
+
+                    <!-- Placeholder when no email selected -->
+                    <div id="placeholder-box"  class="rounded-3 bg-white">
+
+                        <section id="compose-email-section" class="d-flex justify-content-center mx-5 p-5 d-none">
+                            <div class="w-100">
+                                <div>
+                                    <h5 class="text-center">Write an Email</h5>
+                                    <!-- <div class="mb-3">
+                                        <label for="exampleInputEmail1" class="form-label text-start">From</label>
+                                        <input type="email" class="form-control" id="exampleInputEmail1" aria-describedby="emailHelp">
+                                        
+                                    </div> -->
+                                    <div class="mb-3 d-flex align-items-center justify-content-around">
+                                        <label for="exampleInputEmail1" class="form-label text-start me-3">To:</label>
+                                        <input type="email" class="form-control" id="emailTo" value="basha@zentegra.com" readonly>
+                                        
+                                    </div>
+                                    <div class="mb-3 d-flex align-items-center justify-content-around">
+                                        <label for="exampleInputEmailCc" class="form-label text-start me-3">Cc:</label>
+                                        <input type="email" class="form-control" id="emailCc" placeholder="abc@example.com, xyz@example.com">
+                                        
+                                    </div>
+                                    <div class="mb-3 d-flex align-items-center justify-content-around">
+                                        
+                                        <input type="text" class="form-control" id="emailSubject" placeholder="Subject">
+                                        
+                                    </div>
+
+                                   
+                                    <div class="mb-3">
+                                        
+                                        <textarea class="form-control" id="emailContent" placeholder="Write here..." rows="12"></textarea>
+                                    </div>
+
+                                    <button id="emailSubmit" class="btn btn-primary btn-sm" onclick="sendEmail()">Submit <i class="bi bi-send-fill"></i></button>
+                                </div>
+                            </div>
+                        </section>
+
+                        <!-- <img width="300px" height="auto" src="https://blogger.googleusercontent.com/img/a/AVvXsEhVDN1K-GVPqaUsNInGv5GdjWa0G34DhnFrbVxr2C58voqpLHB75Wu23b-_gneQYDOC5jmKODwoyhJ1-6Ufq5qHc_4BQPBAknknqXFDyfu5s4WKCsg1tqHHzbIN_4VEGqpNQtkqpQPGCDjgsKQRK2slFU7b7UNiuSROwtc56xSrf1L7oBGYTz8Pczyz_70" alt=""> -->
+                        
+                        <section id="zoho-mail-box"  class="text-center text-muted mt- mail-full-view ">
+                            <h3 class="pt-5">Zen Mail</h3>
+                            <img src="https://cdn-icons-png.flaticon.com/128/407/407846.png" alt="" style="opacity: 0.8;">
+                            <p class="pt-5">Select an email to view its content.</p>
+                        </section>
+
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="tab-pane fade   px-" id="chart-report">
+
+            <!-- CARDS  -->
+            <section class="project-overview row g-3 mb-3 ">
+
+                <div class="col-6 col-lg">
+                    
+                    
+                    <div class="my-card p-3 p-md-4 ">
+                        <p class="text-uppercase text-muted fw-semibold mb-1">Total Tasks</p>
+                        <h4 id="total-task-count">0</h4>
+                        <div class="my-card-icon purple rounded-circle  text-center">
+                            <i class="bi bi-list-check text-white fs-5"></i>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="col-6 col-lg">
+                    
+                    
+                    <div class="my-card p-3 p-md-4">
+                        <p class="text-uppercase text-muted fw-semibold mb-1">Completed Tasks</p>
+                        <h4 id="completed-task-count">0</h4>
+                        <div class="my-card-icon green rounded-circle  text-center">
+                            <i class="bi bi-check-circle-fill text-white fs-5"></i>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-6 col-lg">
+                    
+                    
+                    <div class="my-card p-3 p-md-4">
+                        <p class="text-uppercase text-muted fw-semibold mb-1">Total Phases</p>
+                        <h4 id="total-phases-count">0</h4>
+                        <div class="my-card-icon yellow rounded-circle  text-center">
+                            <i class="bi bi-layers text-white fs-5"></i>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-6 col-lg">
+                    
+                    
+                    <div class="my-card p-3 p-md-4">
+                        <p class="text-uppercase text-muted fw-semibold mb-1">Days Remaining</p>
+                        <h4 id="days-remaining">0</h4>
+                        <div class="my-card-icon red rounded-circle  text-center">
+                            <i class="bi bi-clock-history text-white fs-5"></i>
+                        </div>
+                    </div>
+                </div>
+            
+
+            </section>
+
+            <!-- <section class="row">
+                <div class="col-4">
+                    <div class="card p-3" >
+                        <canvas id="myBarChart" width="500" height="400"></canvas>
+                    </div>
+                </div>
+                <div class="col-4">
+                    
+                     <div class="card p-3" >
+                        <canvas id="myDoughnutChart" width="100" height="100"></canvas>
+                    </div>
+                </div>
+                <div class="col-4">
+                    
+                     <div class="card p-3" >
+                        <canvas id="budgetvsactual" width="500" height="400"></canvas>
+                    </div>
+                </div>
+                
+            </section> -->
+
+            <!-- CHARTS  -->
+            <section class="row g-3 mb-3">
+                <div class="col-6">
+                    <div class="card p-3 d-flex align-items-center justify-content-center" style="height: 450px;">
+                        <canvas  id="myBarChart"></canvas>
+                    </div>
+                </div>
+                <div class="col-6">
+                    <div class="card p-3 py-5  d-flex align-items-center justify-content-center" style="height: 450px;">
+                        <canvas id="myDoughnutChart"></canvas>
+                    </div>
+                </div>
+                
+            </section>
+
+
+            <!-- OVER DUE TASKS  -->
+            <section class="row g-3">
+                <div class="col-6">
+                    <div class="card p-4" style="height: 450px; overflow-y: auto; scrollbar-width: thin;">
+                        <p class="text-uppercase text-muted fw-semibold mb-1">Overdue Tasks</p>
+                        <table class="table">
+                            <thead>
+                                <tr>
+                                    <td class="text-uppercase text-muted">Tasks</td>
+                                    <td class="text-uppercase text-muted">Due Date</td>
+                                    <!-- <td class="text-uppercase text-muted">Worked</td> -->
+                                </tr>
+                            </thead>
+                            <tbody id="overduetask-tbody">
+                                <tr>
+                                    <td>Add timelog</td>
+                                    <td>5</td>
+                                    <!-- <td>6</td> -->
+                                </tr>
+                            </tbody>
+
+                        </table>
+                    </div>
+                </div>
+                <div class="col-6">
+                    <div class="card p-3 d-flex align-items-center justify-content-center" style="height: 450px;">
+                        <canvas  id="budgetvsactual"></canvas>
+                    </div>
+                </div>
+
+            </section>
+
+
+
+
+            
+
+            
+            
+        </div>
+
+    </div>
+
+</div>
+        </section>
+
+
+      </div>
+    </div>
+  </div>
+</div>
+
+
+<div class="offcanvas offcanvas-end" tabindex="-1" id="offcanvasRight" style="width: 800px;" aria-labelledby="offcanvasRightLabel">
+  <div class="offcanvas-header">
+    <h5 class="offcanvas-title" id="offcanvasRightLabel">Create New Project</h5>
+    <button id="offcanvas-cls-btn" type="button" class="btn-close" data-bs-dismiss="offcanvas" aria-label="Close"></button>
+  </div>
+  <div class="offcanvas-body" id="offcanvasContent">
+  </div>
+</div>
+
+
+
+<div class="offcanvas offcanvas-end" tabindex="-1" id="offcanvasTask" style="width: 800px;" aria-labelledby="offcanvasRightLabel">
+  <div class="offcanvas-header">
+    <h5 class="offcanvas-title" id="offcanvasTaskLabel">Task Canvas</h5>
+    <div class="ms-auto d-flex align-items-center">
+
+
+
+             <section id="offcanvasTaskActionSection" class="d-flex">
+                    
+             </section>
+           
+
+        <button id="offcanvas-task-cls-btn" type="button" class="btn-close" data-bs-dismiss="offcanvas" aria-label="Close"></button>
+    </div>
+    
+  </div>
+  <div class="offcanvas-body" id="">
+    <section id="offcanvasTasksContent">
+
+    </section>
+    <section class="mt-5" id="offcanvasTasksLogs">
+            <h5 class="text-primary">Logs <span id="addmanuallogicon"></span></h5>
+            <div class="card">
+                <table class="table">
+                <tr>
+                    <td class="text-muted text-uppercase small fw-medium">Date</td>
+                    <td class="text-muted text-uppercase small fw-medium">Start</td>
+                    <td class="text-muted text-uppercase small fw-medium">End</td>
+                    <td class="text-muted text-uppercase small fw-medium">Worked</td>
+                </tr>
+                <tbody id="tasklogstbody">
+
+                </tbody>
+            </table>
+            </div>
+
+    </section>
+  </div>
+</div>
+
+
+
+
+<!-- Cards click modal  -->
+
+<!-- Fullscreen Modal -->
+<div class="modal fade" id="cardViewModal" tabindex="-1" aria-hidden="true">
+  <div class="modal-dialog modal-fullscreen">
+    <div class="modal-content">
+
+      <!-- Modal Header -->
+      <div class="modal-header">
+        <h5 class="modal-title" id="modal-title-tasksCount">Card View Fullscreen Modal</h5>
+        <div class="ms-auto input-group" style="width: 300px;">
+            <input id="inputSearchKeyword" type="text" class="form-control" placeholder="Search task name...">
+            <span id="inputSearchKeywordBtn" class="input-group-text bg-primary" id="basic-addon1"><i class="bi bi-search text-white"></i></span>
+        </div>
+        <button type="button" class="btn-close" data-bs-dismiss="modal" onclick="kpiClickClose()" aria-label="Close"></button>
+      </div>
+
+      <!-- Modal Body -->
+      <div class="modal-body" id="cardViewModalBody" style="scrollbar-width: thin; scrollbar-color: #888 #f1f1f1; overflow-y: auto;">
+
+         <table id="task-table" class="table table-rounded btable">
+
+            <thead class="">
+                <tr>
+                    <th class="text-uppercase fw-semibold small text-muted">si</th>
+                    <th class="text-uppercase fw-semibold small text-muted">Task Name</th>
+                    <th class="text-uppercase fw-semibold small text-muted">Description</th>
+                    <th class="text-uppercase fw-semibold small text-center text-muted">Status</th>
+                    <th class="text-uppercase fw-semibold small text-center text-muted">Priority</th>
+                    <th class="text-uppercase fw-semibold small text-center text-muted">Owner</th>
+                    <th class="text-uppercase fw-semibold small text-center text-muted">Task Date</th>
+                    <th class="text-uppercase fw-semibold small text-center text-muted">Start Time</th>
+                    <th class="text-uppercase fw-semibold small text-center text-muted">End Time</th>
+                    <th class="text-uppercase fw-semibold small text-center text-muted">Duration</th>
+                </tr>
+            </thead>
+            <tbody id="kpiTbody">
+
+            </tbody>
+
+        </table>
+        <div id="paginationContainer" class="w-100 text-center"></div>
+       
+      </div>
+
+      <!-- Modal Footer -->
+      <!-- <div class="modal-footer">
+        
+        
+      </div> -->
+
+    </div>
+  </div>
+</div>
+
+<!-- Trigger Button -->
+<!-- <button type="button" class="btn btn-primary mt-3" data-bs-toggle="modal" data-bs-target="#cardViewModal">
+  Open Card View Modal
+</button> -->
+
+<!-- Button trigger modal -->
+
+
+<!-- Modal -->
+<div class="modal fade" id="exampleModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <div class="modal-header bg-white">
+        <h1 class="modal-title fs-5" id="exampleModalLabel">Search Projects</h1>
+        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+      </div>
+      <!-- <div class="modal-body bg-white">
+        <div class="position-relative d-none mb-3" id="emp_input_div">
+            <input type="text" id="employeeSearchInput" class="form-control" placeholder="Search employee..." autocomplete="off">
+            <ul id="employeeDropdownList" class="list-group position-absolute w-100 dropdownList" style="z-index: 1051; display: none;">
+                
+            </ul>
+
+        </div>
+
+        <div class="position-relative mb-3">
+            <input type="text" id="projectNameInput" class="form-control" placeholder="Search projects..." autocomplete="off">
+            <ul id="dropdownList" class="list-group position-absolute w-100 dropdownList" style="z-index: 1050; display: none;"></ul>
+        </div>
+
+        <select id="courseFilter" class="form-select mb-3 d-none">
+            <option value="all">All Projects</option>
+            <option class="bg-status not-started" value="Not Started">Not Started</option>
+            <option class="bg-status in-progress" value="In Progress">In Progress</option>
+            <option class="bg-status completed" value="Completed">Completed</option>
+        </select>
+
+      </div>
+      <div class="modal-footer">
+
+         <button class="btn btn-primary btn-sm" onclick="searchProjectName()">Submit</button>
+       <button type="button" class="btn btn-secondary btn-sm" data-bs-dismiss="modal">Close</button>
+      </div> -->
+            <!-- FORM STARTS HERE -->
+      <form id="searchForm">
+
+        <div class="modal-body bg-white">
+          <div class="position-relative mb-3">
+            <input 
+              type="text" 
+              id="projectNameInput" 
+              name="projectName"
+              class="form-control" 
+              placeholder="Search projects..." 
+              autocomplete="off"
+              required
+            >
+          </div>
+        </div>
+
+        <div class="modal-footer">
+          <button type="submit" class="btn btn-primary btn-sm">
+            Submit (Enter)
+          </button>
+
+          <button type="button" class="btn btn-secondary btn-sm" data-bs-dismiss="modal">
+            Close
+          </button>
+        </div>
+
+      </form>
+      <!-- FORM ENDS HERE -->
+
+
+    </div>
+  </div>
+</div>
+
+<!-- TODAY REPORT  -->
+
+
+<div class="offcanvas offcanvas-bottom" style="height: 100vh;" tabindex="-1" id="offcanvasBottom" aria-labelledby="offcanvasBottomLabel">
+  <div class="offcanvas-header">
+    <h5 class="offcanvas-title" id="offcanvasBottomLabel">Today's Report</h5>
+
+        <!-- <div class="input-group ms-5 " style="width: 15%;">
+            <input id="dateTodayReport" type="text" class="form-control" placeholder="DD-MM-YYYY">
+            <span class="input-group-text bg-primary  cursor-pointer" onclick="trigerTodayReport()"><i class="bi bi-search text-white"></i></span>
+        </div> -->
+        <div class="ms-5">
+            <div id="date-picker-div" class="date-picker">
+                <input type="text" class="form-control" id="dateTodayReport" readonly placeholder="dd-mm-yyyy">
+                <div class="calendar" id="calendar"></div>
+            </div>
+        </div>
+        
+        <div class="ms-4">
+            <button class="btn btn-danger btn-sm" onclick="trigerTodayReport('week')">This Week</button>
+            <button class="btn btn-warning btn-sm" onclick="trigerTodayReport('month')">This Month</button>
+            <button class="btn btn-secondary btn-sm" onclick="triggerExport()">Export</button>
+
+        </div>
+
+        <div class="ms-auto">
+            <input id="dateTodayReportEmp" type="text" class="form-control" placeholder="Search Employee..">
+        </div>
+
+    <button type="button" class="btn-close ms-4" data-bs-dismiss="offcanvas" aria-label="Close"></button>
+  </div>
+  
+  <div id="today-report" class="offcanvas-body small px-5 py-2">
+
+    <div class="row" id="today-report-heroSection">
+        <div class="col my-auto">
+            <section class="p-4 text-white border border-primary-subtle rounded-3 w-100 mb-3" style="background-color: #034D88;">
+
+                <h6 class="mb-3">Daily Summary</h6>
+                
+                <div class="d-flex justify-content-around align-items-end">
+                    <div class="text-center">
+                        <h1 id="emp-count" class="display-6">8</h1>
+                        <p>Employees</p>
+                    </div>
+                    <div class="vl"></div>
+                    <div class="text-center">
+                        <h1 id="total-allocated-time" class="display-6">0h 0m</h1>
+                        <p>Allocated Hrs</p>
+                    </div>
+                    <div class="text-center">
+                        <h1 id="total-worked-time" class="display-6">0h 0m</h1>
+                        <p>Worked Hrs</p>
+                    </div>
+                </div>
+
+            </section>
+        </div>
+
+
+        <div class="col">
+            <section style="height: 300px;">
+            <canvas  id="allovsworked"></canvas>
+        </section>
+        </div>
+    </div>
+
+    
+
+    <section id="emp-accordion">
+    
+        <div class="accordion" id="accordionPanelsStayOpenExample1"></div>
+
+    </section>
+    
+  </div>
+</div>
+
+<!-- PREVIEW MODAL  -->
+
+<!-- Button trigger modal -->
+<!-- <button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#previewModal">
+  Launch demo modal
+</button> -->
+
+<!-- Modal -->
+<div class="modal fade" id="previewModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+  <div class="modal-dialog modal-xl modal-dialog-scrollable bg-white" style="width: 190%; background-color: transparent;">
+    <div class="modal-content">
+      <div class="modal-header py-1 bg-white">
+        <h1 class="modal-title fs-6" id="previewModalTitle">Modal title</h1>
+        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+      </div>
+      <div id="previewModal-body" class="modal-body bg-white">
+        ...
+      </div>
+    </div>
+  </div>
+</div> 
+
+
+
+<!-- ITR Events popup modal  -->
+
+<!-- Modal -->
+<!-- <div class="modal fade" id="ITREventsPopup" tabindex="-1" aria-labelledby="ITREventsPopupLabel" aria-hidden="true">
+
+  <div class="modal-dialog modal-dialog-centered modal-lg">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h1 class="modal-title fs-5" id="ITREventsPopupLabel">Modal title</h1>
+        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+      </div>
+      <div class="modal-body">
+        ...
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+        <button type="button" class="btn btn-primary">Save changes</button>
+      </div>
+    </div>
+  </div>
+
+</div> -->
+
+<script> 
+    const IS_PRODUCTION = true;
+
+    if (IS_PRODUCTION) {
+        console.log = function () {};
+        console.info = function () {};
+        console.warn = function () {};
+        console.debug = function () {};
+    } 
+</script>
+
+
+    <script src="JS/imapEmail.js"></script>
+    <script src="JS/sent_imapEmail.js"></script>
+
+    <script src="JS/datepicker.js"></script>
+
+    <script src="JS/avatar.js"></script>
+
+    <script src="JS/projectEdit.js"></script>
+    <script src="JS/bulkEdit.js"></script>
+    <script src="JS/taskEdit.js"></script>
+    <script src="JS/Task/taskTimer.js"></script>
+    <script src="JS/Task/openTask.js"></script>
+
+    <script src="JS/Files/filesTable.js"></script>
+    <script src="JS/Phase/phaseForm.js"></script>
+    <script src="JS/Notes/notes.js"></script>
+
+    <script src="today-report.js"></script>
+    <script src="kpiClickable.js"></script>
+    <script src="filters.js"></script>
+    <script src="api.js"></script>
+    <script src="mychart.js"></script>
+    <script src="utils.js"></script>
+    <script src="main.js"></script>
+    
+</body>
+</html>
+
+

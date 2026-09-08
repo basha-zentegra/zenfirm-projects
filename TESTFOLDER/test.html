@@ -1,0 +1,20 @@
+	noOfLeave = input.No_Of_Days_Leave;
+	fromDate = input.From;
+	toDate = input.To;
+	leaveType = input.Leave_Type.Leave_Type;
+	
+	emailTemplate = Email_Templates[Type_field == "Leave Notification"];
+	name = Employee[Email == zoho.loginuserid].Name;
+	myManagerEmail = Employee[Email == zoho.loginuserid].Reporting_To.Email;
+	emailMessage= replaceAll(emailTemplate.Message, "@username", name);
+	emailMessage2 = replaceAll(emailMessage, "@numofdays", noOfLeave.toString());
+	emailMessage3 = replaceAll(emailMessage2, "@fromdate", fromDate.toString());
+	emailMessage4 = replaceAll(emailMessage3, "@todate", toDate.toString());
+	info myManagerEmail;
+	sendmail
+    [
+    	from: zoho.loginuserid
+    	to: myManagerEmail
+    	subject: emailTemplate.Subject_field
+    	message: emailMessage4
+    ]

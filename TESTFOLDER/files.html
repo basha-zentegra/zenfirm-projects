@@ -1,0 +1,1874 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Client Dashboard - Davis, Christopher & Jennifer</title>
+    <!-- Bootstrap CSS -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
+    <!-- Bootstrap Icons -->
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.1/font/bootstrap-icons.css">
+    
+    <style>
+        :root {
+            --primary-blue: #3b82f6;
+            --secondary-blue: #1e40af;
+            --purple-accent: #5b21b6;
+            --bg-light: #f8fafc;
+            --bg-white: #ffffff;
+            --text-dark: #111827;
+            --text-medium: #374151;
+            --text-light: #6b7280;
+            --text-lighter: #9ca3af;
+            --border-color: #e2e8f0;
+            --shadow-sm: 0 1px 2px 0 rgb(0 0 0 / 0.05);
+            --shadow-md: 0 4px 6px -1px rgb(0 0 0 / 0.1), 0 2px 4px -2px rgb(0 0 0 / 0.1);
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Inter', 'Segoe UI', system-ui, sans-serif;
+            background-color: var(--bg-light);
+            color: var(--text-medium);
+            font-size: 14px;
+            line-height: 1.5;
+            overflow-x: hidden;
+        }
+
+        /* Header Styles */
+        .header {
+            background-color: var(--bg-white);
+            padding: 20px 24px 16px 24px;
+            border-bottom: 1px solid var(--border-color);
+            box-shadow: var(--shadow-sm);
+        }
+
+        .header h1 {
+            font-size: 22px;
+            font-weight: 600;
+            color: var(--text-dark);
+            margin-bottom: 2px;
+        }
+
+        .header .subtitle {
+            color: var(--text-light);
+            font-size: 13px;
+            font-weight: 400;
+        }
+
+        .header-actions .btn {
+            border: none;
+            padding: 8px;
+            border-radius: 8px;
+            margin-left: 8px;
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            transition: all 0.2s ease;
+            text-shadow:none;
+        }
+
+        .profile-btn {
+            width: 32px;
+            height: 32px;
+            background-color: var(--text-light);
+            color: white;
+            border-radius: 50% !important;
+            font-size: 12px;
+            font-weight: 600;
+        }
+
+        .notification-btn {
+            width: 32px;
+            height: 32px;
+            background-color: #f3f4f6;
+            border: 1px solid var(--border-color);
+            color: var(--text-light);
+        }
+
+        .team-btn {
+            width: 32px;
+            height: 32px;
+            background-color: var(--primary-blue);
+            color: white;
+            border-radius: 50% !important;
+        }
+
+        .more-btn {
+            background: none;
+            border: none;
+            color: var(--text-light);
+            font-size: 18px;
+            padding: 4px 8px;
+        }
+
+        /* Radio Button Tab System */
+        .tabs-container {
+            position: relative;
+            min-height: calc(100vh - 140px);
+        }
+
+        /* Hide all radio inputs */
+        .tab-radio {
+            display: none;
+        }
+
+        /* Navigation Tabs */
+        .nav-tabs-container-1 {
+            background-color: var(--bg-white);
+            border-bottom: 1px solid var(--border-color);
+            padding: 0 24px;
+            overflow-x: auto;
+        }
+
+        .nav-tabs-custom {
+            border: none;
+            gap: 32px;
+            display: flex;
+            list-style: none;
+            margin: 0;
+            padding: 0;
+        }
+
+        .nav-tabs-custom .nav-link {
+            border: none;
+            padding: 12px 0;
+            color: var(--text-light);
+            font-size: 14px;
+            font-weight: 500;
+            white-space: nowrap;
+            background: none;
+            border-bottom: 2px solid transparent;
+            border-radius: 0;
+            text-decoration: none;
+            cursor: pointer;
+            transition: all 0.2s ease;
+            display: flex;
+            align-items: center;
+        }
+
+        .nav-tabs-custom .nav-link:hover {
+            color: var(--text-medium);
+            border-color: transparent;
+            text-decoration: none;
+        }
+
+
+
+        /* Simplified Active Tab Styling */
+        #tab-home:checked ~ .nav-tabs-container-1 label[for="tab-home"],
+        #tab-communication:checked ~ .nav-tabs-container-1 label[for="tab-communication"],
+        #tab-notes:checked ~ .nav-tabs-container-1 label[for="tab-notes"],
+        #tab-files:checked ~ .nav-tabs-container-1 label[for="tab-files"],
+        #tab-tasks:checked ~ .nav-tabs-container-1 label[for="tab-tasks"],
+        #tab-resolution:checked ~ .nav-tabs-container-1 label[for="tab-resolution"],
+        #tab-organizers:checked ~ .nav-tabs-container-1 label[for="tab-organizers"],
+        #tab-transcripts:checked ~ .nav-tabs-container-1 label[for="tab-transcripts"],
+        #tab-billing:checked ~ .nav-tabs-container-1 label[for="tab-billing"],
+        #tab-time:checked ~ .nav-tabs-container-1 label[for="tab-time"] {
+            color: var(--purple-accent);
+            border-bottom-color: var(--purple-accent);
+        }
+
+        /* Tab Content - FIXED */
+        .tab-content {
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: var(--bg-light);
+            padding: 0;
+            display: none;
+            min-height: calc(100vh - 140px);
+        }
+
+        /* Show content when radio is checked - FIXED */
+        #tab-home:checked ~ .tabs-container .tab-content-home,
+        #tab-communication:checked ~ .tabs-container .tab-content-communication,
+        #tab-notes:checked ~ .tabs-container .tab-content-notes,
+        #tab-files:checked ~ .tabs-container .tab-content-files,
+        #tab-tasks:checked ~ .tabs-container .tab-content-tasks,
+        #tab-resolution:checked ~ .tabs-container .tab-content-resolution,
+        #tab-organizers:checked ~ .tabs-container .tab-content-organizers,
+        #tab-transcripts:checked ~ .tabs-container .tab-content-transcripts,
+        #tab-billing:checked ~ .tabs-container .tab-content-billing,
+        #tab-time:checked ~ .tabs-container .tab-content-time {
+            display: block;
+        }
+
+        /* Dashboard Layout */
+        .dashboard-container {
+            padding: 24px;
+            max-width: 1400px;
+            margin: 0 auto;
+        }
+
+        .dashboard-grid {
+            display: grid;
+            grid-template-columns: 320px 1fr 320px;
+            gap: 24px;
+            align-items: start;
+        }
+
+        /* Card Styles */
+        .dashboard-card {
+            background: var(--bg-white);
+            border-radius: 12px;
+            border: 1px solid var(--border-color);
+            box-shadow: var(--shadow-sm);
+            margin-bottom: 24px;
+            overflow: hidden;
+        }
+
+        .card-header-custom {
+            padding: 20px 24px 16px 24px;
+            border-bottom: 1px solid #f3f4f6;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .card-title-custom {
+            font-size: 16px;
+            font-weight: 600;
+            color: var(--text-dark);
+            margin: 0;
+        }
+
+        .card-action {
+            color: var(--primary-blue);
+            text-decoration: none;
+            font-size: 14px;
+            font-weight: 500;
+            display: flex;
+            align-items: center;
+            gap: 4px;
+            cursor: pointer;
+        }
+
+        .card-action:hover {
+            text-decoration: underline;
+            color: var(--secondary-blue);
+        }
+
+        .card-content-custom {
+            padding: 0 24px 20px 24px;
+            margin-top: 15px;
+        }
+
+        /* Info Items */
+        .info-item {
+            margin-bottom: 20px;
+        }
+
+        .info-item:last-child {
+            margin-bottom: 0;
+        }
+
+        .info-label {
+            font-size: 11px;
+            font-weight: 600;
+            color: var(--text-lighter);
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+            margin-bottom: 4px;
+        }
+
+        .info-value {
+            color: var(--text-dark);
+            font-size: 14px;
+            font-weight: 500;
+        }
+
+        .info-value.link {
+            color: var(--primary-blue);
+            text-decoration: none;
+            cursor: pointer;
+        }
+
+        .info-value.link:hover {
+            text-decoration: underline;
+        }
+
+        .badge-custom {
+            background-color: #dbeafe;
+            color: var(--secondary-blue);
+            padding: 4px 12px;
+            border-radius: 16px;
+            font-size: 12px;
+            font-weight: 500;
+        }
+
+        /* Contact Items */
+        .contact-item {
+            padding: 16px 24px;
+            border-bottom: 1px solid #f3f4f6;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+        }
+
+        .contact-item:last-child {
+            border-bottom: none;
+        }
+
+        .contact-name {
+            font-size: 14px;
+            font-weight: 500;
+            color: var(--text-dark);
+            margin-bottom: 2px;
+        }
+
+        .contact-status {
+            font-size: 13px;
+            color: var(--text-light);
+            margin-bottom: 2px;
+        }
+
+        .contact-role {
+            font-size: 12px;
+            color: var(--text-lighter);
+        }
+
+        /* Task Items */
+        .task-item {
+            padding: 12px 24px;
+            border-bottom: 1px solid #f3f4f6;
+            display: grid;
+            grid-template-columns: 100px 1fr 100px;
+            gap: 12px;
+            align-items: center;
+        }
+
+        .task-item:last-child {
+            border-bottom: none;
+        }
+
+        .task-status {
+            font-size: 11px;
+            font-weight: 600;
+            padding: 4px 8px;
+            border-radius: 6px;
+            text-align: center;
+            white-space: nowrap;
+            text-transform: uppercase;
+        }
+
+        .status-progress {
+            background-color: #fef3c7;
+            color: #d97706;
+        }
+
+        .status-not-started {
+            background-color: #f3f4f6;
+            color: var(--text-light);
+        }
+
+        .task-title {
+            color: var(--primary-blue);
+            text-decoration: none;
+            font-size: 14px;
+            font-weight: 500;
+        }
+
+        .task-title:hover {
+            text-decoration: underline;
+            color: var(--secondary-blue);
+        }
+
+        .task-date {
+            color: var(--text-light);
+            font-size: 13px;
+            text-align: right;
+        }
+
+        /* File Items */
+        .file-item {
+            padding: 12px 24px;
+            border-bottom: 1px solid #f3f4f6;
+            display: flex;
+            align-items: center;
+            gap: 12px;
+        }
+
+        .file-item:last-child {
+            border-bottom: none;
+        }
+
+        .file-icon {
+            width: 32px;
+            height: 32px;
+            background-color: #dc2626;
+            border-radius: 6px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            font-size: 12px;
+            font-weight: 700;
+            flex-shrink: 0;
+        }
+
+        .file-name {
+            font-size: 14px;
+            font-weight: 500;
+            color: var(--text-dark);
+            margin-bottom: 2px;
+        }
+
+        .file-meta {
+            font-size: 12px;
+            color: var(--text-light);
+        }
+
+        /* Notes Section */
+        .notes-section {
+            padding: 0 24px 20px 24px;
+            margin-top: 15px;
+        }
+
+        .notes-input {
+            width: 100%;
+            padding: 10px 12px;
+            border: 1px solid #d1d5db;
+            border-radius: 8px;
+            font-size: 13px;
+            background-color: #f8fafc;
+            margin-bottom: 8px;
+        }
+
+        .notes-order {
+            font-size: 12px;
+            color: var(--text-lighter);
+        }
+
+        /* Empty State */
+        .empty-state {
+            padding: 40px 24px;
+            text-align: center;
+        }
+
+        .empty-icon {
+            font-size: 48px;
+            color: var(--text-lighter);
+            margin-bottom: 16px;
+        }
+
+        .empty-title {
+            font-size: 16px;
+            font-weight: 600;
+            color: var(--text-dark);
+            margin-bottom: 8px;
+        }
+
+        .empty-description {
+            font-size: 13px;
+            color: var(--text-light);
+            margin-bottom: 20px;
+            line-height: 1.6;
+        }
+
+        /* Communication Module */
+        .communication-container {
+            padding: 24px;
+            background-color: var(--bg-light);
+            min-height: calc(100vh - 140px);
+        }
+
+        .communication-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 32px;
+        }
+
+        .page-title {
+            font-size: 28px;
+            font-weight: 700;
+            color: var(--text-dark);
+        }
+
+        .email-section {
+            background: var(--bg-white);
+            border-radius: 12px;
+            border: 1px solid var(--border-color);
+            box-shadow: var(--shadow-md);
+            overflow: hidden;
+            max-width: 1200px;
+        }
+
+        .email-header {
+            padding: 20px 24px;
+            border-bottom: 1px solid var(--border-color);
+            background: var(--bg-white);
+        }
+
+        .email-section-title {
+            font-size: 18px;
+            font-weight: 600;
+            color: var(--text-dark);
+        }
+
+        .email-thread {
+            padding: 24px;
+            border-bottom: 1px solid var(--border-color);
+        }
+
+        .email-meta {
+            display: flex;
+            justify-content: space-between;
+            align-items: flex-start;
+            margin-bottom: 16px;
+        }
+
+        .email-meta-left {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .email-reply-info {
+            color: var(--text-light);
+            font-size: 13px;
+            display: flex;
+            align-items: center;
+            gap: 6px;
+        }
+
+        .email-timestamp {
+            color: var(--text-light);
+            font-size: 12px;
+            font-weight: 500;
+        }
+
+        .email-subject {
+            font-size: 18px;
+            font-weight: 600;
+            color: var(--text-dark);
+            margin-bottom: 16px;
+        }
+
+        .email-body {
+            color: var(--text-medium);
+            font-size: 14px;
+            line-height: 1.7;
+        }
+
+        .email-body p {
+            margin-bottom: 12px;
+        }
+
+        .email-actions {
+            padding: 16px 24px;
+            display: flex;
+            gap: 12px;
+            background-color: #f8fafc;
+        }
+
+        .email-action-btn {
+            background: none;
+            border: 1px solid var(--border-color);
+            color: var(--text-light);
+            padding: 8px 12px;
+            border-radius: 8px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            transition: all 0.2s ease;
+            text-decoration: none;
+        }
+
+        .email-action-btn:hover {
+            background-color: var(--bg-white);
+            color: var(--primary-blue);
+            border-color: var(--primary-blue);
+            text-decoration: none;
+        }
+
+        /* Files Module */
+        .files-container {
+            padding: 24px;
+            background-color: var(--bg-light);
+            min-height: calc(100vh - 140px);
+        }
+
+        .files-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 24px;
+        }
+
+        .breadcrumb-nav {
+            font-size: 14px;
+            color: var(--text-light);
+            margin-bottom: 16px;
+        }
+
+        .breadcrumb-separator {
+            margin: 0 8px;
+            color: var(--text-lighter);
+        }
+
+        .files-layout {
+            display: grid;
+            grid-template-columns: 300px 1fr;
+            gap: 24px;
+            max-width: 1400px;
+            margin: 0 auto;
+        }
+
+        /* CLEAN Files Sidebar - Original Design Style */
+        .files-sidebar {
+            background: var(--bg-white);
+            border-radius: 12px;
+            border: 1px solid var(--border-color);
+            box-shadow: var(--shadow-sm);
+            height: fit-content;
+        }
+
+        .folder-tree {
+            padding: 16px 0;
+        }
+
+        /* Clean Folder Structure */
+        .folder-item {
+            display: block;
+            position: relative;
+        }
+
+        /* Hide checkbox completely */
+        .folder-toggle-input {
+            display: none;
+        }
+
+        /* Clean folder toggle styling */
+        .folder-toggle {
+            display: flex;
+            align-items: center;
+            padding: 10px 16px;
+            cursor: pointer;
+            color: var(--text-medium);
+            font-size: 14px;
+            font-weight: 500;
+            border-bottom: 1px solid #f8fafc;
+            transition: all 0.2s ease;
+            user-select: none;
+        }
+
+        .folder-toggle:hover {
+            background-color: #f8fafc;
+        }
+
+        .folder-toggle.selected {
+            background-color: #dbeafe;
+            color: var(--secondary-blue);
+            border-left: 3px solid var(--primary-blue);
+        }
+
+        /* Clean folder icon */
+        .folder-toggle i {
+            margin-right: 8px;
+            color: var(--text-light);
+            font-size: 16px;
+        }
+
+        .folder-toggle.selected i {
+            color: var(--primary-blue);
+        }
+
+        /* Folder Count Badge */
+        .folder-count {
+            margin-left: auto;
+            color: var(--text-lighter);
+            font-size: 12px;
+            background-color: #f3f4f6;
+            padding: 2px 6px;
+            border-radius: 10px;
+        }
+
+        /* Nested folder indentation */
+        .folder-item.subfolder .folder-toggle {
+            padding-left: 32px;
+        }
+
+        .folder-item.sub-subfolder .folder-toggle {
+            padding-left: 48px;
+        }
+
+        /* Expandable folder children - hidden by default */
+        .folder-children {
+            max-height: 0;
+            overflow: hidden;
+            transition: max-height 0.3s ease;
+        }
+
+        /* Show children when parent checkbox is checked */
+        .folder-toggle-input:checked ~ .folder-children {
+            max-height: 500px;
+        }
+
+        /* Files Main Panel */
+        .files-toolbar {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 16px;
+            padding: 16px 20px;
+            background: var(--bg-white);
+            border-radius: 12px;
+            border: 1px solid var(--border-color);
+            box-shadow: var(--shadow-sm);
+        }
+
+        .toolbar-left {
+            display: flex;
+            align-items: center;
+            gap: 16px;
+        }
+
+        .toolbar-icon {
+            color: var(--text-light);
+            font-size: 18px;
+            cursor: pointer;
+            padding: 8px;
+            border-radius: 8px;
+            transition: all 0.2s ease;
+            text-decoration: none;
+        }
+
+        .toolbar-icon:hover {
+            background-color: #f1f5f9;
+            color: var(--primary-blue);
+            text-decoration: none;
+        }
+
+        .search-container {
+            position: relative;
+        }
+
+        .search-input {
+            width: 300px;
+            padding: 10px 12px 10px 40px;
+            border: 1px solid var(--border-color);
+            border-radius: 8px;
+            font-size: 14px;
+            background-color: #f8fafc;
+        }
+
+        .search-icon {
+            position: absolute;
+            left: 12px;
+            top: 50%;
+            transform: translateY(-50%);
+            color: var(--text-lighter);
+            font-size: 16px;
+        }
+
+        /* Files Table */
+        .files-table-container {
+            background: var(--bg-white);
+            border-radius: 12px;
+            border: 1px solid var(--border-color);
+            box-shadow: var(--shadow-md);
+            overflow: hidden;
+        }
+
+        .table-custom {
+            margin: 0;
+            width: 100%;
+            border-collapse: collapse;
+        }
+
+        .table-custom thead {
+            background-color: #f8fafc;
+        }
+
+        .table-custom th {
+            font-size: 13px;
+            font-weight: 600;
+            color: var(--text-medium);
+            border-bottom: 1px solid var(--border-color);
+            padding: 16px;
+        }
+
+        .table-custom td {
+            padding: 16px;
+            vertical-align: middle;
+            font-size: 14px;
+            color: var(--text-medium);
+            border-bottom: 1px solid #f8fafc;
+        }
+
+        .table-custom tbody tr:hover {
+            background-color: #f8fafc;
+        }
+
+        .file-name-cell {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+        }
+
+        .file-table-icon {
+            width: 24px;
+            height: 24px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            border-radius: 6px;
+            font-size: 10px;
+            font-weight: 600;
+            flex-shrink: 0;
+        }
+
+        .file-table-icon.pdf {
+            background-color: #dc2626;
+            color: white;
+        }
+
+        .file-name-text {
+            font-weight: 500;
+            color: var(--text-dark);
+        }
+
+        .files-footer {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 16px 20px;
+            background-color: #f8fafc;
+            border-top: 1px solid var(--border-color);
+            font-size: 13px;
+            color: var(--text-light);
+        }
+
+        .archived-files {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .pagination-custom {
+            display: flex;
+            align-items: center;
+            gap: 16px;
+        }
+
+        /* Button Styles for non-JS environment */
+        .btn {
+            display: inline-block;
+            padding: 8px 16px;
+            font-weight: 500;
+            text-align: center;
+            vertical-align: middle;
+            cursor: pointer;
+            border: 1px solid transparent;
+            border-radius: 8px;
+            text-decoration: none;
+            font-size: 14px;
+            line-height: 1.5;
+            transition: all 0.2s ease;
+        }
+
+        .btn-primary {
+            color: white;
+            background-color: var(--primary-blue);
+            border-color: var(--primary-blue);
+            text-shadow:none;
+        }
+
+        .btn-primary:hover {
+            background-color: var(--secondary-blue);
+            border-color: var(--secondary-blue);
+            color: white;
+            text-decoration: none;
+        }
+
+        .btn-outline-secondary {
+            color: var(--text-medium);
+            background-color: transparent;
+            border-color: var(--border-color);
+        }
+
+        .btn-outline-secondary:hover {
+            color: var(--text-dark);
+            background-color: #f8fafc;
+            border-color: var(--border-color);
+            text-decoration: none;
+        }
+
+        .btn-sm {
+            padding: 6px 12px;
+            font-size: 13px;
+        }
+
+        .btn-link {
+            color: var(--primary-blue);
+            text-decoration: none;
+            background-color: transparent;
+            border: none;
+        }
+
+        .btn-link:hover {
+            color: var(--secondary-blue);
+            text-decoration: underline;
+        }
+
+        /* Form Controls */
+        .form-control {
+            display: block;
+            width: 100%;
+            padding: 8px 12px;
+            font-size: 14px;
+            line-height: 1.5;
+            color: var(--text-dark);
+            background-color: var(--bg-white);
+            border: 1px solid var(--border-color);
+            border-radius: 8px;
+        }
+
+        .form-control:focus {
+            outline: none;
+            border-color: var(--primary-blue);
+            box-shadow: 0 0 0 2px rgba(59, 130, 246, 0.1);
+        }
+
+        .form-check {
+            display: block;
+            min-height: 1.5rem;
+            padding-left: 1.5em;
+            margin-bottom: 0.125rem;
+        }
+
+        .form-check-input {
+            width: 1em;
+            height: 1em;
+            margin-top: 0.25em;
+            margin-left: -1.5em;
+            vertical-align: top;
+            background-color: var(--bg-white);
+            border: 1px solid var(--border-color);
+            border-radius: 0.25em;
+        }
+
+        /* Utility Classes */
+        .d-flex {
+            display: flex !important;
+        }
+
+        .justify-content-between {
+            justify-content: space-between !important;
+        }
+
+        .align-items-center {
+            align-items: center !important;
+        }
+
+        .align-items-start {
+            align-items: flex-start !important;
+        }
+
+        .me-1 { margin-right: 0.25rem !important; }
+        .me-2 { margin-right: 0.5rem !important; }
+        .me-3 { margin-right: 1rem !important; }
+        .ms-1 { margin-left: 0.25rem !important; }
+        .ms-3 { margin-left: 1rem !important; }
+        .mb-0 { margin-bottom: 0 !important; }
+        .p-0 { padding: 0 !important; }
+
+        .text-center { text-align: center !important; }
+        .text-muted { color: var(--text-light) !important; }
+        .text-success { color: #059669 !important; }
+        .text-primary { color: var(--primary-blue) !important; }
+
+        .gap-2 { gap: 0.5rem !important; }
+
+        /* Responsive Design */
+        @media (max-width: 1200px) {
+            .dashboard-grid {
+                grid-template-columns: 1fr 1fr;
+            }
+            
+            .files-layout {
+                grid-template-columns: 250px 1fr;
+            }
+        }
+
+        @media (max-width: 768px) {
+            .header {
+                padding: 16px 20px 12px 20px;
+            }
+
+            .nav-tabs-container-1 {
+                padding: 0 20px;
+                top: 76px;
+            }
+
+            .dashboard-grid {
+                grid-template-columns: 1fr;
+            }
+            
+            .files-layout {
+                grid-template-columns: 1fr;
+            }
+            
+            .files-sidebar {
+                margin-bottom: 16px;
+            }
+            
+            .dashboard-container,
+            .communication-container,
+            .files-container {
+                padding: 16px;
+            }
+
+            .nav-tabs-custom {
+                flex-wrap: nowrap;
+                overflow-x: auto;
+            }
+
+            .search-input {
+                width: 200px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- Tab Radio Inputs -->
+    <input type="radio" id="tab-home" name="tab-group" class="tab-radio" checked>
+    <input type="radio" id="tab-communication" name="tab-group" class="tab-radio">
+    <input type="radio" id="tab-notes" name="tab-group" class="tab-radio">
+    <input type="radio" id="tab-files" name="tab-group" class="tab-radio">
+    <input type="radio" id="tab-tasks" name="tab-group" class="tab-radio">
+    <input type="radio" id="tab-resolution" name="tab-group" class="tab-radio">
+    <input type="radio" id="tab-organizers" name="tab-group" class="tab-radio">
+    <input type="radio" id="tab-transcripts" name="tab-group" class="tab-radio">
+    <input type="radio" id="tab-billing" name="tab-group" class="tab-radio">
+    <input type="radio" id="tab-time" name="tab-group" class="tab-radio">
+
+    <!-- Header -->
+    <header class="header d-flex justify-content-between align-items-start">
+        <div>
+            <h1>Davis, Christopher & Jennifer</h1>
+            <div class="subtitle">Individual</div>
+        </div>
+        <div class="header-actions d-flex align-items-center">
+            <div class="btn profile-btn">AD</div>
+            <div class="btn notification-btn">
+                <i class="bi bi-bell"></i>
+            </div>
+            <div class="btn team-btn">
+                <i class="bi bi-people"></i>
+            </div>
+            <div class="more-btn">
+                <i class="bi bi-three-dots"></i>
+            </div>
+        </div>
+    </header>
+
+    <!-- Navigation Tabs -->
+    <div class="nav-tabs-container-1">
+        <ul class="nav-tabs-custom">
+            <li class="nav-item">
+                <label class="nav-link" for="tab-home">
+                    <i class="bi bi-house me-2"></i>Home
+                </label>
+            </li>
+            <li class="nav-item">
+                <label class="nav-link" for="tab-communication">
+                    <i class="bi bi-chat-left me-2"></i>Communication
+                </label>
+            </li>
+            <li class="nav-item">
+                <label class="nav-link" for="tab-notes">
+                    <i class="bi bi-journal-text me-2"></i>Notes
+                </label>
+            </li>
+            <li class="nav-item">
+                <label class="nav-link" for="tab-files">
+                    <i class="bi bi-folder me-2"></i>Files
+                </label>
+            </li>
+            <li class="nav-item">
+                <label class="nav-link" for="tab-tasks">
+                    <i class="bi bi-check-circle me-2"></i>Tasks
+                </label>
+            </li>
+            <li class="nav-item">
+                <label class="nav-link" for="tab-resolution">
+                    <i class="bi bi-shield-check me-2"></i>Resolution
+                </label>
+            </li>
+            <li class="nav-item">
+                <label class="nav-link" for="tab-organizers">
+                    <i class="bi bi-grid me-2"></i>Organizers
+                </label>
+            </li>
+            <li class="nav-item">
+                <label class="nav-link" for="tab-transcripts">
+                    <i class="bi bi-file-earmark-text me-2"></i>Transcripts
+                </label>
+            </li>
+            <li class="nav-item">
+                <label class="nav-link" for="tab-billing">
+                    <i class="bi bi-credit-card me-2"></i>Billing
+                </label>
+            </li>
+            <li class="nav-item">
+                <label class="nav-link" for="tab-time">
+                    <i class="bi bi-clock me-2"></i>Time Entries
+                </label>
+            </li>
+        </ul>
+    </div>
+
+    <!-- Tabs Container -->
+    <div class="tabs-container">
+        <!-- Home Tab Content -->
+        <div class="tab-content tab-content-home">
+            <div class="dashboard-container">
+                <div class="dashboard-grid">
+                    <!-- Left Column -->
+                    <div class="left-column">
+                        <!-- Client Info Card -->
+                        <div class="dashboard-card">
+                            <div class="card-header-custom">
+                                <h3 class="card-title-custom">
+                                    <i class="bi bi-person-vcard me-2 text-primary"></i>Client Info
+                                </h3>
+                                <a href="#" class="card-action">
+                                    <i class="bi bi-pencil"></i>
+                                </a>
+                            </div>
+                            <div class="card-content-custom">
+                                <div class="info-item">
+                                    <div class="info-label">Client Group</div>
+                                    <div class="info-value link">Christopher Davis Group</div>
+                                </div>
+                                <div class="info-item">
+                                    <div class="info-label">Filing Status</div>
+                                    <div class="info-value">Married filing jointly</div>
+                                </div>
+                                <div class="info-item">
+                                                                        <div class="info-label">Client Owner</div>
+                                    <div class="info-value">Michael Salmon</div>
+                                </div>
+                                <div class="info-item">
+                                    <div class="info-label">Client Since</div>
+                                    <div class="info-value">Jun 24, 2024</div>
+                                </div>
+                                <div class="info-item">
+                                    <div class="info-label">Source</div>
+                                    <div class="info-value">Referral</div>
+                                </div>
+                                <div class="info-item">
+                                    <div class="info-label">Referred By</div>
+                                    <div class="info-value link">Johnson, David & Emily</div>
+                                </div>
+                                <div class="info-item">
+                                    <div class="info-label">Tags</div>
+                                    <div class="info-value">
+                                        <span class="badge-custom">1040</span>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Contacts Card -->
+                        <div class="dashboard-card">
+                            <div class="card-header-custom">
+                                <h3 class="card-title-custom">
+                                    <i class="bi bi-people me-2 text-primary"></i>Contacts
+                                </h3>
+                                <a href="#" class="card-action">
+                                    <i class="bi bi-three-dots"></i>
+                                </a>
+                            </div>
+                            <div class="contact-item">
+                                <div class="contact-info">
+                                    <div class="contact-name">Christopher Davis</div>
+                                    <div class="contact-status">
+                                        <i class="bi bi-circle-fill text-success me-1" style="font-size: 8px;"></i>
+                                        Logged in 45 minutes ago
+                                    </div>
+                                    <div class="contact-role">Primary contact</div>
+                                </div>
+                                <i class="bi bi-chevron-down text-muted"></i>
+                            </div>
+                            <div class="contact-item">
+                                <div class="contact-info">
+                                    <div class="contact-name">Jennifer Davis</div>
+                                    <div class="contact-status">
+                                        <i class="bi bi-circle-fill text-success me-1" style="font-size: 8px;"></i>
+                                        Never logged in
+                                    </div>
+                                    <div class="contact-role">Other</div>
+                                </div>
+                                <i class="bi bi-chevron-down text-muted"></i>
+                            </div>
+                            <div class="contact-item">
+                                <div class="contact-info">
+                                    <h5 class="card-title-custom mb-0">Connections</h5>
+                                </div>
+                                <a href="#" class="btn btn-link p-0">
+                                    <i class="bi bi-plus-lg text-muted"></i>
+                                </a>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Middle Column -->
+                    <div class="middle-column">
+                        <!-- Tasks Card -->
+                        <div class="dashboard-card">
+                            <div class="card-header-custom">
+                                <h3 class="card-title-custom">
+                                    <i class="bi bi-check-square me-2 text-primary"></i>Tasks
+                                </h3>
+                                <label for="tab-tasks" class="card-action">View all tasks</label>
+                            </div>
+                            <div class="task-item">
+                                <span class="task-status status-progress">In Progress</span>
+                                <a href="#" class="task-title">1040 Return [+ automation]</a>
+                                <div class="task-date">11/13/2024</div>
+                            </div>
+                            <div class="task-item">
+                                <span class="task-status status-not-started">Not Started</span>
+                                <a href="#" class="task-title">1040 Return</a>
+                                <div class="task-date">11/15/2024</div>
+                            </div>
+                            <div class="task-item">
+                                <span class="task-status status-not-started">Not Started</span>
+                                <a href="#" class="task-title">1040 Return</a>
+                                <div class="task-date">10/31/2025</div>
+                            </div>
+                            <div class="task-item">
+                                <span class="task-status status-not-started">Not Started</span>
+                                <a href="#" class="task-title">1040 Return</a>
+                                <div class="task-date">-</div>
+                            </div>
+                            <div class="task-item">
+                                <span class="task-status status-not-started">Not Started</span>
+                                <a href="#" class="task-title">Bookkeeping</a>
+                                <div class="task-date">-</div>
+                            </div>
+                        </div>
+
+                        <!-- Notes Card -->
+                        <div class="dashboard-card">
+                            <div class="card-header-custom">
+                                <h3 class="card-title-custom">
+                                    <i class="bi bi-journal-text me-2 text-primary"></i>Notes
+                                </h3>
+                                <label for="tab-notes" class="card-action">Add a note</label>
+                            </div>
+                            <div class="notes-section">
+                                <input type="text" class="notes-input form-control" placeholder="Add a title...">
+                                <div class="notes-order">chronological</div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Right Column -->
+                    <div class="right-column">
+                        <!-- Recently Added Files Card -->
+                        <div class="dashboard-card">
+                            <div class="card-header-custom">
+                                <h3 class="card-title-custom">
+                                    <i class="bi bi-file-earmark me-2 text-primary"></i>Recently Added Files
+                                </h3>
+                                <label for="tab-files" class="card-action">View all files</label>
+                            </div>
+                            <div class="file-item">
+                                <div class="file-icon">
+                                    <i class="bi bi-file-earmark-pdf"></i>
+                                </div>
+                                <div class="file-info">
+                                    <div class="file-name">callitwhatever.pdf</div>
+                                    <div class="file-meta">Michael Salmon added this 2 days ago</div>
+                                </div>
+                            </div>
+                            <div class="file-item">
+                                <div class="file-icon">
+                                    <i class="bi bi-file-earmark-pdf"></i>
+                                </div>
+                                <div class="file-info">
+                                    <div class="file-name">BankStatementApril2024.pdf</div>
+                                    <div class="file-meta">Christopher Davis added this 7 days ago</div>
+                                </div>
+                            </div>
+                            <div class="file-item">
+                                <div class="file-icon">
+                                    <i class="bi bi-file-earmark-pdf"></i>
+                                </div>
+                                <div class="file-info">
+                                    <div class="file-name">2022_W2 (1).pdf</div>
+                                    <div class="file-meta">Christopher Davis added this 8 days ago</div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Resolution Cases Card -->
+                        <div class="dashboard-card">
+                            <div class="card-header-custom">
+                                <h3 class="card-title-custom">
+                                    <i class="bi bi-shield-check me-2 text-primary"></i>Resolution
+                                </h3>
+                                <label for="tab-resolution" class="card-action">Create resolution case</label>
+                            </div>
+                            <div class="empty-state">
+                                <div class="empty-icon">
+                                    <i class="bi bi-clipboard-x"></i>
+                                </div>
+                                <div class="empty-title">No active resolution cases</div>
+                                <div class="empty-description">
+                                    A resolution case allows you to bundle and invoice your work.
+                                </div>
+                                <label for="tab-resolution" class="btn btn-primary">
+                                    <i class="bi bi-plus me-2"></i>Create resolution case
+                                </label>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Communication Tab Content -->
+        <div class="tab-content tab-content-communication">
+            <div class="communication-container">
+                <div class="communication-header">
+                    <h1 class="page-title">
+                        <i class="bi bi-chat-left me-3"></i>Communication
+                    </h1>
+                    <a href="#" class="btn btn-primary">
+                        <i class="bi bi-plus me-2"></i>New email
+                    </a>
+                </div>
+
+                <div class="email-section">
+                    <div class="email-header">
+                        <h2 class="email-section-title">
+                            <i class="bi bi-envelope me-2"></i>Email
+                        </h2>
+                    </div>
+
+                    <div class="email-thread">
+                        <div class="email-meta">
+                            <div class="email-meta-left">
+                                <i class="bi bi-envelope text-primary me-2"></i>
+                                <span class="email-reply-info">
+                                    <i class="bi bi-info-circle me-1"></i>
+                                    You replied to Chris.
+                                </span>
+                            </div>
+                            <div class="email-timestamp">Oct 30, 9:56AM</div>
+                        </div>
+                        
+                        <div class="email-subject">(2) Re: Tax Question</div>
+                        
+                        <div class="email-body">
+                            <p>Hi Chris,</p>
+                            <p>Thank you for reaching out. I appreciate your proactive approach in managing your tax-related matters. Wednesday works for me, let's plan to connect then to discuss your tax questions.</p>
+                            <p>Best regards,<br>
+                            Michael Salmon</p>
+                        </div>
+                    </div>
+                    
+                    <div class="email-actions">
+                        <a href="#" class="email-action-btn" title="Reply">
+                            <i class="bi bi-reply"></i>
+                        </a>
+                        <a href="#" class="email-action-btn" title="Forward">
+                            <i class="bi bi-arrow-right"></i>
+                        </a>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Notes Tab Content -->
+        <div class="tab-content tab-content-notes">
+            <div class="communication-container">
+                <div class="communication-header">
+                    <h1 class="page-title">
+                        <i class="bi bi-journal-text me-3"></i>Notes
+                    </h1>
+                    <a href="#" class="btn btn-primary">
+                        <i class="bi bi-plus me-2"></i>Add Note
+                    </a>
+                </div>
+                <div class="empty-state">
+                    <div class="empty-icon">
+                        <i class="bi bi-journal-x"></i>
+                    </div>
+                    <div class="empty-title">No notes available</div>
+                    <div class="empty-description">
+                        Create your first note to keep track of important information and updates.
+                    </div>
+                    <a href="#" class="btn btn-primary">
+                        <i class="bi bi-plus me-2"></i>Create Note
+                    </a>
+                </div>
+            </div>
+        </div>
+
+        <!-- Files Tab Content -->
+        <div class="tab-content tab-content-files">
+            <div class="files-container">
+                <div class="files-header">
+                    <div>
+                        <h1 class="page-title">
+                            <i class="bi bi-folder me-3"></i>Davis, Christopher & Jennifer
+                        </h1>
+                        <div class="breadcrumb-nav">
+                            <span>Davis, Christopher & Jennifer</span>
+                            <span class="breadcrumb-separator">›</span>
+                            <span>Tax Return</span>
+                        </div>
+                    </div>
+                    <div>
+                        <a href="#" class="btn btn-primary">
+                            <i class="bi bi-plus me-2"></i>Add
+                        </a>
+                    </div>
+                </div>
+
+                <div class="files-layout">
+                    <!-- Clean Original Design Files Sidebar -->
+                    <div class="files-sidebar">
+                        <div class="folder-tree">
+                            <!-- Root Folder with Working Expand/Collapse -->
+                            <div class="folder-item">
+                                <input type="checkbox" id="toggle-root" class="folder-toggle-input" checked>
+                                <label for="toggle-root" class="folder-toggle">
+                                    <i class="bi bi-folder"></i>
+                                    <span>Davis, Christopher & Jennifer</span>
+                                </label>
+                                <div class="folder-children">
+                                    
+                                    <!-- 202X Folder -->
+                                    <div class="folder-item subfolder">
+                                        <input type="checkbox" id="toggle-202x" class="folder-toggle-input">
+                                        <label for="toggle-202x" class="folder-toggle">
+                                            <i class="bi bi-folder"></i>
+                                            <span>202X</span>
+                                        </label>
+                                        <div class="folder-children">
+                                            <div class="folder-item sub-subfolder">
+                                                <div class="folder-toggle">
+                                                    <i class="bi bi-folder"></i>
+                                                    <span>Q1 Documents</span>
+                                                </div>
+                                            </div>
+                                            <div class="folder-item sub-subfolder">
+                                                <div class="folder-toggle">
+                                                    <i class="bi bi-folder"></i>
+                                                    <span>Q2 Documents</span>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+
+                                    <!-- K1s Folder -->
+                                    <div class="folder-item subfolder">
+                                        <div class="folder-toggle">
+                                            <i class="bi bi-folder"></i>
+                                            <span>K1s</span>
+                                        </div>
+                                    </div>
+
+                                    <!-- Misc tax docs Folder -->
+                                    <div class="folder-item subfolder">
+                                        <div class="folder-toggle">
+                                            <i class="bi bi-folder"></i>
+                                            <span>Misc tax docs</span>
+                                        </div>
+                                    </div>
+
+                                    <!-- Tax Organizer Folder -->
+                                    <div class="folder-item subfolder">
+                                        <div class="folder-toggle">
+                                            <i class="bi bi-folder"></i>
+                                            <span>Tax Organizer</span>
+                                        </div>
+                                    </div>
+
+                                    <!-- Tax Return Folder (Selected/Active and Expanded) -->
+                                    <div class="folder-item subfolder">
+                                        <input type="checkbox" id="toggle-tax-return" class="folder-toggle-input" checked>
+                                        <label for="toggle-tax-return" class="folder-toggle selected">
+                                            <i class="bi bi-folder-fill"></i>
+                                            <span>Tax Return</span>
+                                            <span class="folder-count">2</span>
+                                        </label>
+                                        <div class="folder-children">
+                                            
+                                            <!-- Credits Folder -->
+                                            <div class="folder-item sub-subfolder">
+                                                <div class="folder-toggle">
+                                                    <i class="bi bi-folder"></i>
+                                                    <span>Credits</span>
+                                                </div>
+                                            </div>
+
+                                            <!-- Engagement Letters Folder -->
+                                            <div class="folder-item sub-subfolder">
+                                                <div class="folder-toggle">
+                                                    <i class="bi bi-folder"></i>
+                                                    <span>Engagement Letters</span>
+                                                </div>
+                                            </div>
+
+                                            <!-- Income Docs Folder -->
+                                            <div class="folder-item sub-subfolder">
+                                                <input type="checkbox" id="toggle-income-docs" class="folder-toggle-input">
+                                                <label for="toggle-income-docs" class="folder-toggle">
+                                                    <i class="bi bi-folder"></i>
+                                                    <span>Income Docs</span>
+                                                </label>
+                                                <div class="folder-children">
+                                                    <div class="folder-item" style="padding-left: 64px;">
+                                                        <div class="folder-toggle">
+                                                            <i class="bi bi-folder"></i>
+                                                            <span>W2 Forms</span>
+                                                        </div>
+                                                    </div>
+                                                    <div class="folder-item" style="padding-left: 64px;">
+                                                        <div class="folder-toggle">
+                                                            <i class="bi bi-folder"></i>
+                                                            <span>1099 Forms</span>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+
+                                    <!-- To Do Folder -->
+                                    <div class="folder-item subfolder">
+                                        <div class="folder-toggle">
+                                            <i class="bi bi-folder"></i>
+                                            <span>To Do</span>
+                                        </div>
+                                    </div>
+
+                                    <!-- Wealth Mgmt Folder -->
+                                    <div class="folder-item subfolder">
+                                        <input type="checkbox" id="toggle-wealth-mgmt" class="folder-toggle-input">
+                                        <label for="toggle-wealth-mgmt" class="folder-toggle">
+                                            <i class="bi bi-folder"></i>
+                                            <span>Wealth Mgmt</span>
+                                        </label>
+                                        <div class="folder-children">
+                                            <div class="folder-item sub-subfolder">
+                                                <div class="folder-toggle">
+                                                    <i class="bi bi-folder"></i>
+                                                    <span>Investment Reports</span>
+                                                </div>
+                                            </div>
+                                            <div class="folder-item sub-subfolder">
+                                                <div class="folder-toggle">
+                                                    <i class="bi bi-folder"></i>
+                                                    <span>Portfolio Analysis</span>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+
+                                    <!-- Working Papers Folder -->
+                                    <div class="folder-item subfolder">
+                                        <div class="folder-toggle">
+                                            <i class="bi bi-folder"></i>
+                                            <span>Working Papers</span>
+                                        </div>
+                                    </div>
+
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Files Main Panel -->
+                    <div class="files-main">
+                        <div class="files-toolbar">
+                            <div class="toolbar-left">
+                                <a href="#" class="toolbar-icon" title="Email"><i class="bi bi-envelope"></i></a>
+                                <a href="#" class="toolbar-icon" title="Download"><i class="bi bi-download"></i></a>
+                                <a href="#" class="toolbar-icon" title="Upload"><i class="bi bi-upload"></i></a>
+                                <a href="#" class="toolbar-icon" title="Print"><i class="bi bi-printer"></i></a>
+                                <div class="search-container">
+                                    <i></i>
+                                    <input type="text" class="search-input form-control" placeholder="Search your files">
+                                </div>
+                            </div>
+                            <div class="toolbar-right">
+                                <a href="#" class="toolbar-icon" title="Share"><i class="bi bi-people"></i></a>
+                            </div>
+                        </div>
+
+                        <div class="files-table-container">
+                            <table class="table-custom">
+                                <thead>
+                                    <tr>
+                                        <th style="width: 40px;"></th>
+                                        <th>Name <i class="bi bi-chevron-down"></i></th>
+                                        <th style="width: 140px;">Date added</th>
+                                        <th style="width: 180px;">Added by</th>
+                                        <th style="width: 100px;">Visible</th>
+                                        <th style="width: 40px;"></th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    <tr>
+                                        <td>
+                                            <div class="form-check">
+                                                <input class="form-check-input" type="checkbox">
+                                            </div>
+                                        </td>
+                                        <td class="file-name-cell">
+                                            <div class="file-table-icon pdf">
+                                                <i class="bi bi-file-earmark-pdf"></i>
+                                            </div>
+                                            <span class="file-name-text">BankStatementApril2024.pdf</span>
+                                        </td>
+                                        <td class="text-muted">10/30/2024</td>
+                                        <td class="text-muted">Christopher Davis</td>
+                                        <td class="text-center">
+                                            <i class="bi bi-person text-muted"></i>
+                                        </td>
+                                        <td class="text-center">
+                                            <a href="#" class="btn btn-link btn-sm">
+                                                <i class="bi bi-three-dots-vertical"></i>
+                                            </a>
+                                        </td>
+                                    </tr>
+                                    <tr>
+                                        <td>
+                                            <div class="form-check">
+                                                <input class="form-check-input" type="checkbox">
+                                            </div>
+                                        </td>
+                                        <td class="file-name-cell">
+                                            <div class="file-table-icon pdf">
+                                                <i class="bi bi-file-earmark-pdf"></i>
+                                            </div>
+                                            <span class="file-name-text">callitwhatever.pdf</span>
+                                        </td>
+                                        <td class="text-muted">11/5/2024</td>
+                                        <td class="text-muted">Michael Salmon (me)</td>
+                                        <td class="text-center">
+                                            <i class="bi bi-person text-muted"></i>
+                                        </td>
+                                        <td class="text-center">
+                                            <a href="#" class="btn btn-link btn-sm">
+                                                <i class="bi bi-three-dots-vertical"></i>
+                                            </a>
+                                        </td>
+                                    </tr>
+                                </tbody>
+                            </table>
+                            
+                            <div class="files-footer">
+                                <div class="archived-files">
+                                    <i class="bi bi-archive me-2"></i>
+                                    <span>Archived files</span>
+                                </div>
+                                <div class="pagination-custom">
+                                    <a href="#" class="btn btn-link btn-sm" style="opacity: 0.5; pointer-events: none;">
+                                        <i class="bi bi-chevron-left"></i>
+                                    </a>
+                                    <span class="fw-medium">1</span>
+                                    <a href="#" class="btn btn-link btn-sm" style="opacity: 0.5; pointer-events: none;">
+                                        <i class="bi bi-chevron-right"></i>
+                                    </a>
+                                    <a href="#" class="btn btn-outline-secondary btn-sm ms-3">
+                                        50 <i class="bi bi-chevron-down ms-1"></i>
+                                    </a>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Tasks Tab Content -->
+        <div class="tab-content tab-content-tasks">
+            <div class="communication-container">
+                <div class="communication-header">
+                    <h1 class="page-title">
+                        <i class="bi bi-check-square me-3"></i>Tasks
+                    </h1>
+                    <a href="#" class="btn btn-primary">
+                        <i class="bi bi-plus me-2"></i>New Task
+                    </a>
+                </div>
+                
+                <div class="dashboard-card">
+                    <div class="card-header-custom">
+                        <h3 class="card-title-custom">All Tasks</h3>
+                        <div class="d-flex gap-2">
+                            <a href="#" class="btn btn-sm btn-outline-secondary">
+                                <i class="bi bi-funnel me-1"></i>Filter
+                            </a>
+                            <a href="#" class="btn btn-sm btn-outline-secondary">
+                                <i class="bi bi-sort-down me-1"></i>Sort
+                            </a>
+                        </div>
+                    </div>
+                    <div class="task-item">
+                        <span class="task-status status-progress">In Progress</span>
+                        <a href="#" class="task-title">1040 Return [+ automation]</a>
+                        <div class="task-date">11/13/2024</div>
+                    </div>
+                    <div class="task-item">
+                        <span class="task-status status-not-started">Not Started</span>
+                        <a href="#" class="task-title">1040 Return</a>
+                        <div class="task-date">11/15/2024</div>
+                    </div>
+                    <div class="task-item">
+                        <span class="task-status status-not-started">Not Started</span>
+                        <a href="#" class="task-title">1040 Return</a>
+                        <div class="task-date">10/31/2025</div>
+                    </div>
+                    <div class="task-item">
+                        <span class="task-status status-not-started">Not Started</span>
+                        <a href="#" class="task-title">Bookkeeping</a>
+                        <div class="task-date">-</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Resolution Cases Tab Content -->
+        <div class="tab-content tab-content-resolution">
+            <div class="communication-container">
+                <div class="communication-header">
+                    <h1 class="page-title">
+                        <i class="bi bi-shield-check me-3"></i>Resolution Cases
+                    </h1>
+                    <a href="#" class="btn btn-primary">
+                        <i class="bi bi-plus me-2"></i>Create Case
+                    </a>
+                </div>
+                <div class="empty-state">
+                    <div class="empty-icon">
+                        <i class="bi bi-clipboard-x"></i>
+                    </div>
+                    <div class="empty-title">No active resolution cases</div>
+                    <div class="empty-description">
+                        A resolution case allows you to bundle and invoice your work efficiently.
+                    </div>
+                    <a href="#" class="btn btn-primary">
+                        <i class="bi bi-plus me-2"></i>Create Resolution Case
+                    </a>
+                </div>
+            </div>
+        </div>
+
+        <!-- Organizers Tab Content -->
+        <div class="tab-content tab-content-organizers">
+            <div class="communication-container">
+                <div class="communication-header">
+                    <h1 class="page-title">
+                        <i class="bi bi-grid me-3"></i>Organizers
+                    </h1>
+                    <a href="#" class="btn btn-primary">
+                        <i class="bi bi-plus me-2"></i>New Organizer
+                    </a>
+                </div>
+                <div class="empty-state">
+                    <div class="empty-icon">
+                        <i class="bi bi-grid-3x3"></i>
+                    </div>
+                    <div class="empty-title">No organizers available</div>
+                    <div class="empty-description">
+                        Tax organizers and questionnaires will appear here when available.
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Transcripts Tab Content -->
+        <div class="tab-content tab-content-transcripts">
+            <div class="communication-container">
+                <div class="communication-header">
+                    <h1 class="page-title">
+                        <i class="bi bi-file-earmark-text me-3"></i>Transcripts
+                    </h1>
+                    <a href="#" class="btn btn-primary">
+                        <i class="bi bi-upload me-2"></i>Upload Transcript
+                    </a>
+                </div>
+                <div class="empty-state">
+                    <div class="empty-icon">
+                        <i class="bi bi-mic"></i>
+                    </div>
+                    <div class="empty-title">No transcripts available</div>
+                    <div class="empty-description">
+                        Meeting transcripts and recordings will appear here after sessions.
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Billing Tab Content -->
+        <div class="tab-content tab-content-billing">
+            <div class="communication-container">
+                <div class="communication-header">
+                    <h1 class="page-title">
+                        <i class="bi bi-credit-card me-3"></i>Billing
+                    </h1>
+                    <a href="#" class="btn btn-primary">
+                        <i class="bi bi-plus me-2"></i>New Invoice
+                    </a>
+                </div>
+                <div class="empty-state">
+                    <div class="empty-icon">
+                        <i class="bi bi-receipt"></i>
+                    </div>
+                    <div class="empty-title">No billing information available</div>
+                    <div class="empty-description">
+                        Invoices and billing details will appear here when available.
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Time Entries Tab Content -->
+        <div class="tab-content tab-content-time">
+            <div class="communication-container">
+                <div class="communication-header">
+                    <h1 class="page-title">
+                        <i class="bi bi-clock me-3"></i>Time Entries
+                    </h1>
+                    <a href="#" class="btn btn-primary">
+                        <i class="bi bi-plus me-2"></i>Add Time Entry
+                    </a>
+                </div>
+                <div class="empty-state">
+                    <div class="empty-icon">
+                        <i class="bi bi-stopwatch"></i>
+                    </div>
+                    <div class="empty-title">No time entries available</div>
+                    <div class="empty-description">
+                        Time tracking information and entries will appear here.
+                    </div>
+                    <a href="#" class="btn btn-primary">
+                        <i class="bi bi-play me-2"></i>Start Timer
+                    </a>
+                </div>
+            </div>
+        </div>
+    </div>
+</body>
+</html>

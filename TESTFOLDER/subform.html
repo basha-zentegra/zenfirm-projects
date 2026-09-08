@@ -1,0 +1,142 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Form with Sub Form</title>
+
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      background: #f4f4f4;
+      padding: 20px;
+    }
+
+    form {
+      background: #fff;
+      padding: 20px;
+      max-width: 600px;
+      margin: auto;
+      border-radius: 8px;
+    }
+
+    label {
+      display: block;
+      margin-top: 10px;
+    }
+
+    input {
+      width: 100%;
+      padding: 8px;
+      margin-top: 5px;
+    }
+
+    fieldset {
+      border: 2px solid #ccc;
+      margin-top: 20px;
+      padding: 15px;
+    }
+
+    legend {
+      font-weight: bold;
+    }
+
+    .sub-form {
+      border: 1px dashed #999;
+      padding: 10px;
+      margin-top: 10px;
+      border-radius: 5px;
+    }
+
+    button {
+      margin-top: 15px;
+      padding: 8px 15px;
+      cursor: pointer;
+    }
+
+    .remove-btn {
+      background: #e74c3c;
+      color: white;
+      border: none;
+    }
+
+    .add-btn {
+      background: #2ecc71;
+      color: white;
+      border: none;
+    }
+
+    .submit-btn {
+      background: #3498db;
+      color: white;
+      border: none;
+      width: 100%;
+    }
+  </style>
+</head>
+<body>
+
+  <form id="mainForm">
+    <h2>Main Form</h2>
+
+    <!-- Main form fields -->
+    <label>
+      Name:
+      <input type="text" name="name" required>
+    </label>
+
+    <label>
+      Email:
+      <input type="email" name="email" required>
+    </label>
+
+    <!-- Sub Form Section -->
+    <fieldset>
+      <legend>Sub Form (Items)</legend>
+
+      <div id="subForms"></div>
+
+      <button type="button" class="add-btn" onclick="addSubForm()">Add Item</button>
+    </fieldset>
+
+    <button type="submit" class="submit-btn">Submit Form</button>
+  </form>
+
+  <script>
+    let itemCount = 0;
+
+    function addSubForm() {
+      itemCount++;
+
+      const div = document.createElement("div");
+      div.className = "sub-form";
+
+      div.innerHTML = `
+        <h4>Item ${itemCount}</h4>
+
+        <label>
+          Item Name:
+          <input type="text" name="itemName[]" required>
+        </label>
+
+        <label>
+          Quantity:
+          <input type="number" name="quantity[]" required>
+        </label>
+
+        <button type="button" class="remove-btn" onclick="this.parentElement.remove()">
+          Remove
+        </button>
+      `;
+
+      document.getElementById("subForms").appendChild(div);
+    }
+
+    // Optional: prevent actual submit (for testing)
+    document.getElementById("mainForm").addEventListener("submit", function(e) {
+      e.preventDefault();
+      alert("Form submitted successfully!");
+    });
+  </script>
+
+</body>
+</html>

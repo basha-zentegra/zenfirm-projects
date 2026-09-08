@@ -1,0 +1,127 @@
+.email-item:hover {
+    background: #eef5ff;
+    cursor: pointer;
+}
+.email-item {
+    border-bottom: 1px solid #e6e6e6;
+    padding: 15px;
+}
+.subject {
+    font-size: 14px;
+    font-weight: 500;
+}
+.from {
+    font-size:12px;
+    color: #555;
+}
+.date {
+    font-size: 10px;
+    color: #888;
+}
+.active-email {
+    background: #dce9ff !important;
+}
+.mail-full-view{
+    background-color: white;
+    height: 80vh;
+    align-content: center;
+}
+
+/* new version of the ui  */
+
+        .email-container {
+            max-width: 950px;
+            margin: 40px auto;
+        }
+
+        .email-card {
+            background: white;
+            border-radius: 14px;
+            box-shadow: 0 2px 12px rgba(0,0,0,0.08);
+            overflow: hidden;
+            height: 80vh;
+            overflow-y: scroll;
+        }
+
+        .email-header {
+            padding: 25px;
+            border-bottom: 1px solid #eee;
+        }
+
+        .email-subject {
+            font-size: 28px;
+            font-weight: 600;
+            color: #222;
+            margin-bottom: 12px;
+        }
+
+        .sender-row {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .sender-info {
+            display: flex;
+            align-items: center;
+            gap: 15px;
+        }
+
+        .avatar {
+            width: 48px;
+            height: 48px;
+            border-radius: 50%;
+            background: #0d6efd;
+            color: white;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            font-size: 22px;
+            font-weight: bold;
+        }
+
+        .meta-label {
+            font-size: 13px;
+            color: #777;
+        }
+
+        .meta-value {
+            font-size: 15px;
+            color: #222;
+        }
+
+        .email-body {
+            padding: 30px;
+            /* line-height: 1.8; */
+            color: #333;
+            white-space: pre-wrap;
+
+
+        }
+
+        .email-footer {
+            padding: 20px 30px;
+            border-top: 1px solid #eee;
+            background: #fafafa;
+        }
+
+        .badge-custom {
+            background: #eef3ff;
+            color: #0d6efd;
+            padding: 6px 12px;
+            border-radius: 30px;
+            font-size: 13px;
+        }
+
+        .action-btn {
+            border-radius: 30px;
+            padding: 8px 18px;
+        }
+
+        .detail-grid {
+            margin-top: 15px;
+        }
+
+        .detail-item {
+            margin-bottom: 10px;
+        }

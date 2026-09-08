@@ -1,0 +1,31 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>Add Query Params Without Reload</title>
+</head>
+<body>
+
+  <h2>Update URL Query Parameters</h2>
+
+  <button id="updateBtn">Add Query Params</button>
+
+
+  <p id="output"></p>
+
+  <script>
+    document.getElementById("updateBtn").addEventListener("click", function () {
+      
+      // Create URL object from current URL
+      const url = new URL(window.location);
+
+      // Add or update query parameters
+      url.searchParams.set("pid", "266830000003950399");
+
+      // Update URL without refreshing page
+      window.history.pushState({}, "", url);
+
+    });
+  </script>
+
+</body>
+</html>

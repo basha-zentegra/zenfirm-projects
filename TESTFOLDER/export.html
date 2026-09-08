@@ -1,0 +1,47 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+<body>
+    <button onclick="trigger()">Download</button>
+    <script>
+        const data = [
+  { name: "John", age: 30 },
+  { name: "Anna", age: 25 },
+  { name: "Mark", age: 40 }
+];
+
+function downloadCSV(array, filename = "data.csv") {
+  // Convert array of objects → CSV text
+  const headers = Object.keys(array[0]).join(",");
+  const rows = array
+    .map(obj => Object.values(obj).join(","))
+    .join("\n");
+
+  const csvContent = headers + "\n" + rows;
+
+  // Create a blob
+  const blob = new Blob([csvContent], { type: "text/csv" });
+  const url = URL.createObjectURL(blob);
+
+  // Create download link
+  const a = document.createElement("a");
+  a.href = url;
+  a.download = filename;
+  a.click();
+
+  URL.revokeObjectURL(url);
+}
+
+function trigger(){
+  downloadCSV(data, "myfile.csv");
+
+}
+
+
+    </script>
+</body>
+</html>

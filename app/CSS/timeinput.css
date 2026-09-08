@@ -1,0 +1,27 @@
+.time-picker {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    font-size: 1.5rem;
+}
+
+.time-box {
+    width: 70px;
+    text-align: center;
+    font-weight: bold;
+    border: 1px solid #ced4da;
+    border-radius: 5px;
+    padding: 8px;
+    background-color: #fff;
+}
+
+.arrow-btns {
+    display: flex;
+    flex-direction: column;
+}
+
+.arrow-btns button {
+    padding: 0;
+    height: 20px;
+    font-size: 12px;
+}

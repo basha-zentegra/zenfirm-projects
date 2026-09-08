@@ -1,0 +1,165 @@
+/* .notepad-card {
+  min-width: 18rem;
+  background: #fffbe6;
+  padding: 1.25rem 1.5rem;
+  border-radius: 6px;
+  box-shadow: 
+    0 4px 6px rgba(0, 0, 0, 0.1),
+    inset 0 -1px 0 rgba(0, 0, 0, 0.08);
+  position: relative;
+  font-family: "Segoe UI", "Comic Sans MS", cursive;
+}
+
+
+.notepad-card::before {
+  content: "";
+  position: absolute;
+  left: 14px;
+  top: 0;
+  bottom: 0;
+  width: 2px;
+  background: #ff6b6b;
+  opacity: 0.6;
+}
+
+
+.notepad-card {
+  background-image: repeating-linear-gradient(
+    to bottom,
+    #fffbe6,
+    #fffbe6 28px,
+    #e6e6e6 29px
+  );
+}
+
+.note-title {
+  font-weight: 600;
+  margin-bottom: 0.25rem;
+}
+
+.note-subtitle {
+  font-size: 0.85rem;
+  color: #6c757d;
+  margin-bottom: 0.75rem;
+}
+
+.note-text {
+  font-size: 0.95rem;
+  line-height: 1.6;
+}
+
+.note-links a {
+  font-size: 0.85rem;
+  margin-right: 0.75rem;
+  text-decoration: none;
+  color: #0d6efd;
+}
+
+.note-links a:hover {
+  text-decoration: underline;
+}
+
+
+.notepad-card {
+  transform: rotate(-0.5deg);
+}
+
+.notepad-card {
+  background: #fff3a0;
+}
+
+
+.notepad-card:hover {
+  transform: translateY(-4px);
+  transition: 0.2s ease;
+} */
+
+
+/* NEW VIEW OF NOTES  */
+
+#account-notes-sec, #all-notes-sec, #task-notes-sec{
+        background:#ffff;
+        padding:40px;
+        border-radius: 14px; 
+        margin-top: 8px;
+    }
+
+    .notes-card{
+        background:#fff;
+        border:1px solid #ddd;
+        box-shadow:0 2px 8px rgba(0,0,0,.12);
+        max-width:700px;
+        margin:auto;
+    }
+
+    .notes-header{
+        padding:16px 20px;
+    }
+
+    .note-item{
+        display:flex;
+        padding:16px 20px;
+        border-bottom:1px solid #eee;
+    }
+
+    .note-item:hover{
+       transform: scale(1.02);
+       background-color: #FCF8FF;
+       border-radius: 20px;
+       box-shadow: rgba(0, 0, 0, 0.35) 0px 5px 15px;
+       transition: 0.2s ease-in-out;
+       
+
+    }
+
+    .note-avatar{
+        width:38px;
+        height:38px;
+        border-radius:2px;
+        object-fit:cover;
+        margin-right:12px;
+    }
+
+    .note-content{
+        flex:1;
+    }
+
+    .note-author{
+        color:#2a5db0;
+        font-size:16px;
+        font-weight:500;
+        margin-bottom:4px;
+    }
+
+    .note-text{
+        font-size:15px;
+        color:#222;
+        line-height:1.4;
+        margin-bottom:8px;
+    }
+
+    .note-meta{
+        font-size:14px;
+        color:#888;
+        font-weight: 500;
+    }
+
+    .note-meta a{
+        text-decoration:none;
+        color:#2a5db0;
+        margin:0 4px;
+    }
+
+    .add-note-section{
+        display:flex;
+        padding:16px 20px;
+        border-top:1px solid #eee;
+    }
+
+    .add-note-input{
+        margin-left:12px;
+    }
+
+    .dropdown-toggle::after{
+        margin-left:8px;
+    }

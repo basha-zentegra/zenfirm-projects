@@ -1,0 +1,148 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Dynamic Timeline</title>
+
+  <!-- Bootstrap CSS -->
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
+
+  <!-- Bootstrap Icons -->
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons/font/bootstrap-icons.css" rel="stylesheet">
+
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+    <style>
+body {
+  background-color: #1e1f22;
+  color: #e4e6eb;
+  font-family: Arial, sans-serif;
+}
+
+.timeline {
+  position: relative;
+  margin-left: 30px;
+}
+
+.timeline::before {
+  content: '';
+  position: absolute;
+  left: 14px;
+  top: 0;
+  bottom: 0;
+  width: 2px;
+  background: #3a3b3c;
+}
+
+.timeline-item {
+  display: flex;
+  margin-bottom: 30px;
+}
+
+.timeline-icon {
+  width: 30px;
+  height: 30px;
+  background: #2b2d31;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: #cfd2d6;
+  z-index: 1;
+}
+
+.timeline-content {
+  margin-left: 20px;
+}
+
+.time {
+  display: block;
+  font-size: 12px;
+  color: #a1a1a1;
+  margin-bottom: 5px;
+}
+
+.text-success {
+  color: #3ddc84 !important;
+}
+
+    </style>
+
+<div class="container py-4">
+  <div id="timeline" class="timeline"></div>
+</div>
+
+<script>
+    const timelineData = [
+  {
+    time: "05:41 PM",
+    icon: "bi-arrow-repeat",
+    title: "Function ITR was called",
+    description: "via Workflow Rule itr"
+  },
+  {
+    time: "05:41 PM",
+    icon: "bi-pencil",
+    title: "ITR Updated",
+    description: `
+      ITR Owner updated from <strong>ROY VARGIS</strong> to <strong>Dayananda R</strong><br>
+      ITR Filing Status updated to <strong>ITR Ready for Preparer</strong><br>
+      Docs Received: <strong>Jul 11, 2023</strong><br>
+      <small class="text-muted">via Function ITR</small>
+    `
+  },
+  {
+    time: "05:41 PM",
+    icon: "bi-check2-square",
+    title: "Task added – Prepare Gurunath Pokala Amendment Tax Filing 2020",
+    description: "via Function ITR",
+    highlight: true
+  },
+  {
+    time: "05:32 PM",
+    icon: "bi-grid",
+    title: "ITR Created",
+    description: "via Function ITR"
+  },
+   {
+    time: "05:41 PM",
+    icon: "bi-check2-square",
+    title: "Task added – Prepare Gurunath Pokala Amendment Tax Filing 2020",
+    description: "via Function ITR",
+    highlight: true
+  },
+  {
+    time: "05:41 PM",
+    icon: "bi-arrow-repeat",
+    title: "Function ITR was called",
+    description: "via Workflow Rule itr"
+  },
+];
+
+const timeline = document.getElementById("timeline");
+
+timelineData.forEach(item => {
+  const timelineItem = document.createElement("div");
+  timelineItem.className = "timeline-item";
+
+  timelineItem.innerHTML = `
+    <div class="timeline-icon">
+      <i class="bi ${item.icon}"></i>
+    </div>
+    <div class="timeline-content">
+      <span class="time">${item.time}</span>
+      <p class="${item.highlight ? 'text-success' : ''}">
+        <strong>${item.title}</strong><br>
+        ${item.description}
+      </p>
+    </div>
+  `;
+
+  timeline.appendChild(timelineItem);
+});
+
+</script>
+</body>
+</html>
