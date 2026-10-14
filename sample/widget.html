@@ -1,0 +1,115 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>PDF Form Filler</title>
+</head>
+<body>
+    
+    <!-- <button onclick="fillPdf()">Submit & Generate PDF</button> -->
+    
+    <iframe id="pdfPreview" width="100%" height="800px"></iframe>
+
+    <script src="pdf-lib.min.js"></script>
+    <!-- <script src="https://js.zohostatic.com/creator/widgets/version/2.0/widgetsdk-min.js"></script> -->
+     <script src=" https://js.zohostatic.com/creator/widgets/version/1.0/widgetsdk-min.js"></script>
+    <script type="text/javascript" src="https://js.zohostatic.com/creator/widgets/version/1.0/widgetsdk-min.js"></script>
+    
+    <script>
+ 
+     let globalRecordId = "";
+        async function logPdfFields() {
+            try {
+                const pdfBytes = await fetch("Form 2553 Blank.pdf").then(res => res.arrayBuffer());
+                const pdfDoc = await PDFLib.PDFDocument.load(pdfBytes);
+                const form = pdfDoc.getForm();
+                
+                
+                console.log("--- PDF Fields Found ---");
+                const fields = form.getFields();
+                fields.forEach(field => {
+                    console.log(`Field Name: ${field.getName()} | Type: ${field.constructor.name}`);
+                });
+                console.log("------------------");
+            } catch (error) {
+                console.error("Error reading PDF fields:", error);
+            }
+        }
+
+        async function fillPdf() {
+            try {
+                
+                // var queryParams = ZOHO.CREATOR.UTIL.getQueryParams();
+                // console.log("Query response", queryParams.recordParam);
+
+                const recordId = globalRecordId;
+
+                if (!recordId) {
+                    alert("No Record ID found in the URL.");
+                    return;
+                }
+
+                
+                const config = {
+                    appName: "form-2553",       
+                    reportName: "test_form_Report",
+                    id: recordId
+                };
+                
+                const recordResponse = await ZOHO.CREATOR.API.getRecordById(config);
+                const recordData = recordResponse.data;
+                console.log("Zoho Record Data:", recordData);
+
+               
+                const pdfBytes = await fetch("Form 2553 Blank.pdf").then(res => res.arrayBuffer());
+                const pdfDoc = await PDFLib.PDFDocument.load(pdfBytes);
+                const form = pdfDoc.getForm();
+                
+                const personName = recordData.Name.display_value || "";
+              
+               
+                const nameField = form.getTextField("topmostSubform[0].Page1[0].NameAddress[0].f1_01[0]");
+                // form.getTextField("topmostSubform[0].Page1[0].NameAddress[0].f1_02[0]").setText("mani");
+                const checkbox = form.getCheckBox("topmostSubform[0].Page1[0].c1_1[0]").check();
+                nameField.setText(personName);
+
+                // Replace "mani" with dynamic data from Zoho, e.g., recordData.Your_Field_Name
+                // nameField.setText("mani"); 
+
+                // Lock fields
+                //form.flatten();
+
+                
+                const filledPdfBytes = await pdfDoc.save();
+                const pdfUrl = URL.createObjectURL(new Blob([filledPdfBytes], { type: "application/pdf" }));
+                
+                document.getElementById("pdfPreview").src = pdfUrl;
+
+            } catch (error) {
+                console.error("Error in PDF generation process:", error);
+                alert("An error occurred. Check the browser console.");
+            }
+        }
+
+        
+ZOHO.CREATOR.init().then(async function(data) {       
+            console.log("Zoho SDK Initialized");
+            
+          
+            var queryParams = await ZOHO.CREATOR.UTIL.getQueryParams();
+            console.log("Query response from Init:=======================================", queryParams);
+            
+          
+            if (queryParams) {
+                globalRecordId = queryParams.recordParam;
+                console.log("Record ID successfully saved to global variable:", globalRecordId);
+            }
+
+            logPdfFields(); 
+
+            await fillPdf();
+        });
+    </script>
+</body>
+</html>

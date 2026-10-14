@@ -1,4 +1,5 @@
 var TODAY = returnToday();
+let incorpId = "";
 
 let current_Project_Page = 1;
 let project_count = 0;
@@ -545,6 +546,9 @@ function populateITR(PID, group){
    ZOHO.CREATOR.API.getAllRecords(itrConfig).then(function (res) {
         console.log("✅ ITR report:", USERID, res.data);
         if(res.code === 3000){
+
+          incorpId = res.data[0].ID;
+
           if(res.data.length === 1){
 
             
@@ -575,7 +579,6 @@ function populateITR(PID, group){
             } else if( group === "Incorp_Report"){
 
                itrModule.innerHTML = `<iframe style="height: 80vh; width: 100%;"  src="https://creatorapp.zohopublic.in/zentegraindia/zenfirm/Incorp/record-edit/Incorp_Report/${res.data[0].ID}/5tqCe70eVFDpJDb7xq6OUnOgHnSj2jtQJCmkjFOHzFGqhh1yAF1uKNHC0MkPX1BhU21VbsKOejnsW3PXmbh5hXZ7TAZX4tWNYBQZ?params=${USERID}" frameborder="0"></iframe>`;
-
             }
 
           } else if(res.data.length > 1){
@@ -878,7 +881,7 @@ function generateEmployeeList(apiData) {
         }
 
         // Convert HH.MM to total minutes
-        const [hours, minutes] = logHours.split(".").map(Number);
+        const [hours, minutes = 0] = String(logHours).split(".").map(Number);
 
         const totalMinutes = (hours * 60) + minutes;
 
@@ -903,6 +906,7 @@ function generateEmployeeList(apiData) {
 
         return {
             name: employee.name,
+            totalMinutes: employee.totalMinutes,
             hours: `${hours}.${String(minutes).padStart(2, "0")}`
         };
     });
@@ -931,7 +935,7 @@ async function populateTaskKpi(PID) {
                 reportName: "Copy_of_All_Logs",
                 criteria: `(Project == ${PID} )`,
                 page: page,
-                pageSize: pageSize
+                pageSize: pageSize 
             };
             //&& Employee.Name!="Basha A"
 
@@ -970,6 +974,48 @@ async function populateTaskKpi(PID) {
         const employees = generateEmployeeList(allLogs);
 
         console.log("👨‍💼 EMPLOYEE KPI DATA:", employees);
+
+        // Project total = sum of every employee's minutes, shown as H.MM
+        const projectMinutes = employees.reduce((sum, employee) => sum + employee.totalMinutes, 0);
+        const projectHours = `${Math.floor(projectMinutes / 60)}.${String(projectMinutes % 60).padStart(2, "0")}`;
+
+        kpiContainer.insertAdjacentHTML("beforeend", `
+                <div class="kpi-card">
+
+                    <div class="d-flex align-items-center gap-2">
+
+                        <div class="employee-icon">
+                            <i class="bi bi-clock-history"></i>
+                        </div>
+
+                        <div class="flex-grow-1 min-width-0">
+
+                            <div class="employee-label">
+                                Project
+                            </div>
+
+                            <div class="employee-name" title="Total Logged Hours">
+                                Total Logged
+                            </div>
+
+                        </div>
+
+                    </div>
+
+                    <div class="d-flex align-items-end mt-2">
+
+                        <div class="hours">
+                            ${projectHours}
+                        </div>
+
+                        <div class="hours-label ms-1 mb-1">
+                            hrs
+                        </div>
+
+                    </div>
+
+                </div>
+            `);
 
 
         // Render KPI cards
@@ -1030,75 +1076,6 @@ async function populateTaskKpi(PID) {
 
 
 
-// function populateTaskKpi(PID){
-
-//   const kpiContainer = document.getElementById("kpiContainer");
-
-//   const logsConfig = {
-//     appName: "zenfirm",
-//     reportName: "All_Logs",
-//     criteria : `(Project == ${PID})`,
-//     page : 1,
-//     pageSize : 200
-    
-//   };
-
-//   ZOHO.CREATOR.API.getAllRecords(logsConfig).then(function (response) {
-
-//       if (response.code === 3000) {
-//         console.log("✅ PROJECT LOGS:", response.data);
-
-//         const employees = generateEmployeeList(response.data || []);
-
-//         console.log(employees);
-
-//            employees.forEach(employee => {
-
-//           const card = `
-//             <div class="kpi-card">
-
-//                 <div class="d-flex align-items-center gap-2">
-
-//                     <!-- Bootstrap Person Icon -->
-//                     <div class="employee-icon">
-//                         <i class="bi bi-person-fill"></i>
-//                     </div>
-
-//                     <div class="flex-grow-1 min-width-0">
-
-//                         <div class="employee-label">
-//                             Employee
-//                         </div>
-
-//                         <div class="employee-name" title="${employee.name}">
-//                             ${employee.name}
-//                         </div>
-
-//                     </div>
-
-//                 </div>
-
-//                 <div class="d-flex align-items-end mt-2">
-
-//                     <div class="hours">
-//                         ${employee.hours}
-//                     </div>
-
-//                     <div class="hours-label ms-1 mb-1">
-//                         hrs
-//                     </div>
-
-//                 </div>
-
-//             </div>
-//         `;
-
-//         kpiContainer.insertAdjacentHTML("beforeend", card);
-
-//     });
-//       }
-//   });
-// }
 
 async function populateFiles(TID){
 

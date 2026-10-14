@@ -376,7 +376,8 @@ async function openModal(pid, UID=null) {
 
 
     console.log("Selected project:", project);
-    document.getElementById("itr-btn").classList.remove("d-none"); 
+    document.getElementById("itr-btn").classList.remove("d-none");
+    document.getElementById("inc-pdf-button").onclick = null;
     if(project?.Project_Group1?.display_value === "Individual Tax Filing"){
 
       itrBtn.innerHTML = `<i class="me-1 fs-md-6 bi bi-card-checklist"></i> ITR`;
@@ -408,7 +409,9 @@ async function openModal(pid, UID=null) {
     else if(project?.Project_Group1?.display_value === "Incorporation"){
       itrBtn.innerHTML = `<i class="me-1 fs-md-6 bi bi-card-checklist"></i> Incorp Details`;
       itrBtn.onclick = () => populateITR(pid, "Incorp_Report");
+      document.getElementById("inc-pdf-button").onclick = () => fetchIncorp(pid);
       selected_project_group = '';
+      document.getElementById("inc-pdf-button").classList.remove("d-none")
     } 
     else {
       itrBtn.innerHTML = `<i class="me-1 fs-md-6 bi bi-card-checklist"></i> None`;
@@ -416,6 +419,7 @@ async function openModal(pid, UID=null) {
       // itrBtn.classList.add("d-none");
       selected_project_group = '';
       document.getElementById("itr-btn").classList.add("d-none"); 
+      document.getElementById("inc-pdf-button").classList.add("d-none");
       
     } 
 
@@ -774,13 +778,11 @@ function fetchTeams(){
     // Load data for this page here
   }
 
-  setTimeout(() => {
-    
-  }, 5000);
 
   
 function closeProjectModal(){
   document.getElementById("task-nav-button").click()
+  document.getElementById("inc-pdf-button").classList.add("d-none");
 }
 
 
